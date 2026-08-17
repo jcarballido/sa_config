@@ -1,9 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ProductViewer } from './components/ProductViewer'
 import { ProductControls } from './components/ProductControls'
+import { LoadingScreen } from './components/LoadingScreen'
+import { Login } from './components/Login'
+import { useAuthStore } from './stores/auth.store'
 import { PRODUCTS } from './viewerConfig'
 
 export default function App() {
+  const auth = useAuthStore((s) => s.auth)
   const [productId, setProductId] = useState(PRODUCTS[0].id)
   const [variantIndex, setVariantIndex] = useState(0)
   const [kind, setKind] = useState<'model' | 'image'>('model')
@@ -24,6 +28,21 @@ export default function App() {
   }
 
   const activeUrl = kind === 'model' ? variant.modelUrl : variant.imageUrl
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      useAuthStore.getState().setAuthStatus({ status: 'unauthenticated', session: null, user: null })
+    }, 1200)
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (auth.status === 'loading') {
+    return <LoadingScreen />
+  }
+
+  if (auth.status === 'unauthenticated') {
+    return <Login />
+  }
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">

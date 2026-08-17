@@ -4,6 +4,8 @@ import { and, asc, eq } from 'drizzle-orm'
 import { assets } from './schema.js'
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import z from 'zod'
+import { supabase } from './supabase/supabase.js'
 export async function registerRoutes(app: FastifyInstance) {
   app.get("/test",async(request,reply) => {
   const S3 = new S3Client({
@@ -21,6 +23,66 @@ export async function registerRoutes(app: FastifyInstance) {
       { expiresIn: 3600 },
     ),
   );
+})
+
+app.post("/login/requestAccess", async(request,reply) => {
+    console.log("Request: requestMagicLink")
+    console.log(request.body)
+    const AccessRequest = z.object({email: z.string()})
+    const body = AccessRequest.safeParse(request.body)
+    if(body.error){
+      console.log("error parsing request")
+      return {
+        status:"error",
+        data:null,
+        error:{
+          code:"LINK REQUEST VIOLATED CONTRACT",
+          message:"The request was not formatted correctly."
+        }
+      }
+    }
+    const { email } = body.data
+    const allowedEmails: string[] = process.env.ALLOWED_EMAIL_LIST
+      ? process.env.ALLOWED_EMAIL_LIST.split(",").map(allowedEmail => allowedEmail.trim())
+      : []
+    if(!allowedEmails.includes(email)){
+      console.log("EMAIL IS NOT WHITELISTED")
+      return {
+        status:"error",
+        data:null,
+        error:{
+          code:"EMAIL IS NOT WHITE LISTED",
+          message:"Email provided is not allowed a magic link."
+        }
+      }
+    }
+
+    try {
+      console.log("Attempting to send to supabase")
+      await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: 'http://localhost:5173',
+        }
+      })
+      console.log("Supabase email request sent.")      
+    } catch (error) {
+      console.log("Error sending to supabase")
+      console.log(error)
+    }
+
+    return {
+      status:"success",
+      data:{requestApproved:true},
+      error:null
+    }
+
+    // console.log("RESULT FROM MAGIC LINK REQUEST:")
+    // console.log(JSON.stringify(response))
+
+    // return {
+    //   status:"Request for magic link processed.",
+    // }
   })
 
   // app.get('/api/assets', async (request, reply) => {

@@ -3,6 +3,11 @@ import { sendMagicLink } from '../api/auth'
 import { Message } from './Message'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const MIN_FEEDBACK_DELAY = 1000
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
 
 export function Login() {
   const [email, setEmail] = useState('')
@@ -23,7 +28,7 @@ export function Login() {
     setValidationError(null)
     setError(null)
     try {
-      await sendMagicLink(trimmed)
+      await Promise.all([sendMagicLink(trimmed), sleep(MIN_FEEDBACK_DELAY)])
       setSubmitted(true)
     } catch (err) {
       setError(String(err))

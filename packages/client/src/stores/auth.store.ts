@@ -1,18 +1,37 @@
 import { create } from 'zustand'
 import type { Session, User } from '@supabase/supabase-js'
 
-type AuthStatus = {
-  status: 'loading' | 'unauthenticated' | 'authenticated'
-  session: Session | null
-  user: User | null
+// type AuthStatus = {
+//   status: 'loading' | 'unauthenticated' | 'authenticated'
+//   session: Session | null
+//   user: User | null
+// }
+
+type State = {
+  authStatus: {status: "authenticated", session: Session, user: User } | {status: "unauthenticated" | "loading" ,session: null, user: null },
+  // status: 'loading' | 'unauthenticated' | 'authenticated'
+  // session: Session | null
+  // user: User | null
+  error:string | null,
 }
 
-type AuthStore = {
-  auth: AuthStatus
-  setAuthStatus: (auth: AuthStatus) => void
+type Action = {
+  setAuthStatus: (authStatus: State["authStatus"]) => void
+  setAuthError: (description: string | null) => void  
 }
 
-export const useAuthStore = create<AuthStore>((set) => ({
-  auth: { status: 'loading', session: null, user: null },
-  setAuthStatus: (auth) => set({ auth }),
+// type AuthStore = {
+//   auth: AuthStatus
+//   setAuthStatus: (auth: AuthStatus) => void
+// }
+
+export const useAuthStore = create<State&Action>((set) => ({
+  authStatus:{
+    status: 'loading',
+    session: null, 
+    user: null,
+  },
+  error: null,
+  setAuthStatus: (auth) => set({ authStatus: auth }),
+  setAuthError: (description) => set({error: description})
 }))

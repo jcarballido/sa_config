@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@types/node':
+        specifier: ^24.13.3
+        version: 24.13.3
       typescript:
         specifier: ~6.0.2
         version: 6.0.3
@@ -86,16 +89,16 @@ importers:
         version: 16.6.1
       drizzle-orm:
         specifier: ^0.44.2
-        version: 0.44.7(@types/pg@8.21.0)(pg@8.22.0)
+        version: 0.44.7(@types/pg@8.21.0)(pg@8.22.0)(postgres@3.4.9)
       fastify:
         specifier: ^5.6.1
         version: 5.11.3
       fastify-plugin:
         specifier: ^6.0.0
         version: 6.0.0
-      pg:
-        specifier: ^8.16.3
-        version: 8.22.0
+      postgres:
+        specifier: ^3.4.9
+        version: 3.4.9
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -1778,6 +1781,10 @@ packages:
     resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
     engines: {node: '>=0.10.0'}
 
+  postgres@3.4.9:
+    resolution: {integrity: sha512-GD3qdB0x1z9xgFI6cdRD6xu2Sp2WCOEoe3mtnyB5Ee0XrrL5Pe+e4CCnJrRMnL1zYtRDZmQQVbvOttLnKDLnaw==}
+    engines: {node: '>=12'}
+
   potpack@1.0.2:
     resolution: {integrity: sha512-choctRBIV9EMT9WGAZHn3V7t0Z2pMQyl0EZE6pFc/6ml3ssw7Dlf/oAOvFwjm1HVsqfQN8GfeFyJ+d8tRzqueQ==}
 
@@ -3002,10 +3009,11 @@ snapshots:
       esbuild: 0.25.12
       tsx: 4.23.11
 
-  drizzle-orm@0.44.7(@types/pg@8.21.0)(pg@8.22.0):
+  drizzle-orm@0.44.7(@types/pg@8.21.0)(pg@8.22.0)(postgres@3.4.9):
     optionalDependencies:
       '@types/pg': 8.21.0
       pg: 8.22.0
+      postgres: 3.4.9
 
   enhanced-resolve@5.24.5:
     dependencies:
@@ -3397,13 +3405,15 @@ snapshots:
   pg-cloudflare@1.4.0:
     optional: true
 
-  pg-connection-string@2.14.0: {}
+  pg-connection-string@2.14.0:
+    optional: true
 
   pg-int8@1.0.1: {}
 
   pg-pool@3.14.0(pg@8.22.0):
     dependencies:
       pg: 8.22.0
+    optional: true
 
   pg-protocol@1.15.0: {}
 
@@ -3424,10 +3434,12 @@ snapshots:
       pgpass: 1.0.5
     optionalDependencies:
       pg-cloudflare: 1.4.0
+    optional: true
 
   pgpass@1.0.5:
     dependencies:
       split2: 4.2.0
+    optional: true
 
   picocolors@1.1.1: {}
 
@@ -3468,6 +3480,8 @@ snapshots:
   postgres-interval@1.2.0:
     dependencies:
       xtend: 4.0.2
+
+  postgres@3.4.9: {}
 
   potpack@1.0.2: {}
 

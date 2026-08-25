@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { and, asc, eq } from 'drizzle-orm'
 // import { db } from './db.js'
-import { assets } from './schema.js'
+// import { assets } from './schema.js'
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import z from 'zod'

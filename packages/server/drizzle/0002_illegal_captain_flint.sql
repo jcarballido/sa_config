@@ -1,0 +1,1 @@
+ALTER TABLE "assets" ADD COLUMN "model_number" varchar NOT NULL;

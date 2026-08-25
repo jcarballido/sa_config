@@ -22,6 +22,20 @@
       "when": 1787536106109,
       "tag": "0002_illegal_captain_flint",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1787624314641,
+      "tag": "0003_vengeful_lightspeed",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1787626589919,
+      "tag": "0004_bitter_thundra",
+      "breakpoints": true
     }
   ]
 }

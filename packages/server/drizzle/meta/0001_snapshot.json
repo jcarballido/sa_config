@@ -1,6 +1,6 @@
 {
-  "id": "fd490eb6-5304-4c9a-b015-ed92ae7255eb",
-  "prevId": "d9ad3f82-9557-4c52-ae47-99e59ab870f8",
+  "id": "44ab992c-71fa-4672-80a6-c9e819966627",
+  "prevId": "28f7ebb3-76e9-4656-b1c5-1e6711866d56",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -44,27 +44,140 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
+        },
+        "category_id": {
+          "name": "category_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "assets_category_id_categories_id_fk": {
+          "name": "assets_category_id_categories_id_fk",
+          "tableFrom": "assets",
+          "columnsFrom": [
+            "category_id"
+          ],
+          "tableTo": "categories",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "assets_hash_unique": {
+          "name": "assets_hash_unique",
+          "columns": [
+            "hash"
+          ],
+          "nullsNotDistinct": false
+        },
+        "assets_storage_key_unique": {
+          "name": "assets_storage_key_unique",
+          "columns": [
+            "storage_key"
+          ],
+          "nullsNotDistinct": false
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.categories": {
+      "name": "categories",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "assets_hash_unique": {
-          "name": "assets_hash_unique",
-          "nullsNotDistinct": false,
+        "categories_name_unique": {
+          "name": "categories_name_unique",
           "columns": [
-            "hash"
-          ]
-        },
-        "assets_storage_key_unique": {
-          "name": "assets_storage_key_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "storage_key"
-          ]
+            "name"
+          ],
+          "nullsNotDistinct": false
         }
       },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.config_assets": {
+      "name": "config_assets",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "config_id": {
+          "name": "config_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "asset_id": {
+          "name": "asset_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "config_assets_config_id_configurations_id_fk": {
+          "name": "config_assets_config_id_configurations_id_fk",
+          "tableFrom": "config_assets",
+          "columnsFrom": [
+            "config_id"
+          ],
+          "tableTo": "configurations",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        },
+        "config_assets_asset_id_assets_id_fk": {
+          "name": "config_assets_asset_id_assets_id_fk",
+          "tableFrom": "config_assets",
+          "columnsFrom": [
+            "asset_id"
+          ],
+          "tableTo": "assets",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -80,43 +193,31 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "asset_id": {
-          "name": "asset_id",
-          "type": "uuid",
+        "model_number": {
+          "name": "model_number",
+          "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
-        "config_id": {
-          "name": "config_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "volume": {
-          "name": "volume",
-          "type": "integer",
+        "signature": {
+          "name": "signature",
+          "type": "uuid[]",
           "primaryKey": false,
           "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "configurations_asset_id_assets_id_fk": {
-          "name": "configurations_asset_id_assets_id_fk",
-          "tableFrom": "configurations",
-          "tableTo": "assets",
-          "columnsFrom": [
-            "asset_id"
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "configurations_model_number_unique": {
+          "name": "configurations_model_number_unique",
+          "columns": [
+            "model_number"
           ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "nullsNotDistinct": false
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -124,10 +225,10 @@
   },
   "enums": {},
   "schemas": {},
+  "views": {},
   "sequences": {},
   "roles": {},
   "policies": {},
-  "views": {},
   "_meta": {
     "columns": {},
     "schemas": {},

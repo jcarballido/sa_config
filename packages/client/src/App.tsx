@@ -1,25 +1,17 @@
-import { useEffect, useState, type MouseEventHandler } from 'react'
+import { useEffect, useState } from 'react'
 import { ProductViewer } from './components/ProductViewer'
 import { ProductControls } from './components/ProductControls'
-import { LoadingScreen } from './components/LoadingScreen'
 import { Login } from './components/Login'
 import { useAuthStore } from './stores/auth.store'
 import { PRODUCTS } from './viewerConfig'
-import { supabase } from './lib/supabase'
-
-// const MIN_LOAD_MS = 800
 
 export default function App() {
-  // const auth = useAuthStore((s) => s.authStatus)
-  const { authStatus} = useAuthStore()
-
-  // const [ready, setReady] = useState(false)
+  const { authStatus } = useAuthStore()
   const [productId, setProductId] = useState(PRODUCTS[0].id)
   const [variantIndex, setVariantIndex] = useState(0)
   const [kind, setKind] = useState<'model' | 'image'>('model')
   const [color, setColor] = useState<string | null>(null)
   const [pinged, setPinged] = useState<boolean>(false)
-
 
   const product = PRODUCTS.find((p) => p.id === productId) ?? PRODUCTS[0]
   const variant = product.variants[Math.min(variantIndex, product.variants.length - 1)]
@@ -36,56 +28,88 @@ export default function App() {
   }
 
   const activeUrl = kind === 'model' ? variant.modelUrl : variant.imageUrl
+  const summary = `${product.name} / ${variant.label} / ${kind === 'model' ? '3D Model' : 'Render'}`
 
-  // useEffect(() => {
-  //   let cancelled = false
-  //   const minDelay = new Promise((r) => setTimeout(r, MIN_LOAD_MS))
-  //   minDelay.then(() => {
-  //     if (!cancelled) setReady(true)
-  //   })
-  //   return () => {
-  //     cancelled = true
-  //   }
-  // }, [])
   useEffect(() => {
-  if(authStatus.status === "authenticated" && !pinged){
-    setPinged(true)
-    // getStoredConversationMetadata()
-  }
-},[authStatus.status])
-
-  // if (!ready || auth.status === 'loading') {
-  //   return <LoadingScreen />
-  // }
+    if (authStatus.status === 'authenticated' && !pinged) {
+      setPinged(true)
+      // TODO: Wire up stored conversation metadata fetch
+    }
+  }, [authStatus.status])
 
   if (authStatus.status === 'unauthenticated') {
     return <Login />
   }
 
-  const handle: MouseEventHandler = async (e) => {
-    e.preventDefault()
-    const {error} = await supabase.auth.signOut()
-  }
-
   return (
-    <div className="min-h-screen w-screen bg-zinc-950 text-zinc-100 absolute z-0">
-      <header className="border-b border-zinc-800 px-6 py-4">
-        <h1 className="text-xl font-semibold">Asset Studio</h1>
-        <p className="text-sm text-zinc-500">UI only — server disconnected, assets shown as placeholders</p>
-        <button onClick={handle}>LOGOUT</button>
+    <main className="min-h-screen bg-zinc-950 text-zinc-100">
+      {/* Header */}
+      <header className="flex items-center justify-between border-b border-zinc-800 px-6 py-5 lg:px-10">
+        <div className="flex items-center gap-3">
+          {/* Placeholder for brand icon */}
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800">
+            <div className="h-4 w-4 rounded bg-zinc-600" />
+          </div>
+          <div>
+            <p className="font-mono text-[10px] tracking-[0.22em] text-zinc-500">sa_config</p>
+            <h1 className="text-sm font-semibold tracking-tight text-zinc-100">Security Product Configurator</h1>
+          </div>
+        </div>
+        {/* <span className="hidden text-xs text-zinc-500 sm:block">Unsaved configuration</span> */}
       </header>
 
-      <main className="mx-auto flex max-w-7xl flex-col gap-6 px-6 py-6 md:h-[calc(100vh-6rem)] md:flex-row">
-        <div className="h-[50vh] min-h-0 flex-1 md:h-auto">
+      {/* Main content */}
+      <div className="mx-auto flex max-w-375 flex-col gap-6 p-5 lg:flex-row lg:p-8">
+        {/* Left section */}
+        <section className="flex min-w-0 flex-1 flex-col gap-4">
+          {/* Title row with mode switch */}
+          <div className="flex items-end justify-between">
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.22em] text-zinc-500">Product / {product.id.toUpperCase()}</p>
+              <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-zinc-100">Shape your object</h2>
+            </div>
+            <div className="flex overflow-hidden rounded-lg border border-zinc-700 text-sm">
+              <button
+                onClick={() => setKind('model')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 transition ${
+                  kind === 'model' ? 'bg-zinc-700 text-white' : 'bg-zinc-950 text-zinc-400 hover:bg-zinc-800'
+                }`}
+              >
+                <div className="h-3.5 w-3.5 rounded bg-zinc-500" />
+                3D model
+              </button>
+              <button
+                onClick={() => setKind('image')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 transition ${
+                  kind === 'image' ? 'bg-zinc-700 text-white' : 'bg-zinc-950 text-zinc-400 hover:bg-zinc-800'
+                }`}
+              >
+                <div className="h-3.5 w-3.5 rounded bg-zinc-500" />
+                Rendered image
+              </button>
+            </div>
+          </div>
+
+          {/* Preview area */}
           <ProductViewer
             label={`${product.name} · ${variant.label}`}
             modelUrl={variant.modelUrl}
             imageUrl={variant.imageUrl}
-            kind={kind}
+            kind={'model'}
             color={color}
           />
-        </div>
 
+          {/* Current configuration bar */}
+          <div className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900 px-5 py-4">
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.22em] text-zinc-500">Current configuration</p>
+              <p className="mt-1 text-sm font-medium text-zinc-100">{summary}</p>
+            </div>
+            {/* <p className="text-xs text-zinc-500">Preloaded render updates with your selections</p> */}
+          </div>
+        </section>
+
+        {/* Right sidebar */}
         <ProductControls
           products={PRODUCTS}
           productId={product.id}
@@ -94,11 +118,9 @@ export default function App() {
           onVariantChange={handleVariantChange}
           kind={kind}
           onKindChange={setKind}
-          color={color}
-          onColorChange={setColor}
           downloadUrl={activeUrl}
         />
-      </main>
-    </div>
+      </div>
+    </main>
   )
 }

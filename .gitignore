@@ -3,3 +3,5 @@ dist/
 **/**/.env
 packages/server/storage/
 *.local
+packages/client/mock.tsx
+packages/client/public/*.glb

@@ -9,19 +9,8 @@ type ProductControlsProps = {
   onVariantChange: (index: number) => void
   kind: 'model' | 'image'
   onKindChange: (kind: 'model' | 'image') => void
-  color: string | null
-  onColorChange: (color: string | null) => void
   downloadUrl: string | null
 }
-
-const SWATCHES: { name: string; value: string | null }[] = [
-  { name: 'Original', value: null },
-  { name: 'Red', value: '#ef4444' },
-  { name: 'Blue', value: '#3b82f6' },
-  { name: 'Green', value: '#22c55e' },
-  { name: 'Purple', value: '#a855f7' },
-  { name: 'Amber', value: '#f59e0b' },
-]
 
 async function downloadFile(url: string, label: string): Promise<void> {
   const res = await fetch(url)
@@ -38,17 +27,30 @@ async function downloadFile(url: string, label: string): Promise<void> {
   URL.revokeObjectURL(objectUrl)
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function OptionRow({
+  label,
+  selected,
+  onClick,
+}: {
+  label: string
+  selected: boolean
+  onClick: () => void
+}) {
   return (
-    <label className="flex flex-col gap-1 text-sm text-zinc-400">
+    <button
+      onClick={onClick}
+      className={`flex w-full items-center justify-between rounded-lg border px-4 py-3 text-sm font-medium transition ${
+        selected
+          ? 'border-zinc-600 bg-zinc-800 text-zinc-100'
+          : 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-zinc-700 hover:bg-zinc-900'
+      }`}
+    >
       <span>{label}</span>
-      {children}
-    </label>
+      <span className="flex h-5 w-5 items-center justify-center rounded-full border border-zinc-600 text-[10px]">
+        {selected ? '✓' : ''}
+      </span>
+    </button>
   )
-}
-
-function Divider() {
-  return <div className="h-px bg-zinc-800" />
 }
 
 export function ProductControls({
@@ -59,14 +61,14 @@ export function ProductControls({
   onVariantChange,
   kind,
   onKindChange,
-  color,
-  onColorChange,
   downloadUrl,
 }: ProductControlsProps) {
   const [downloading, setDownloading] = useState(false)
   const [downloadError, setDownloadError] = useState<string | null>(null)
   const product = products.find((p) => p.id === productId) ?? products[0]
   const activeVariant = product.variants[variantIndex] ?? product.variants[0]
+
+  const configIndex = `N04-${product.name.slice(0, 2).toUpperCase()}-${kind === 'model' ? '3D' : 'RN'}`
 
   async function handleDownload() {
     if (!downloadUrl) return
@@ -82,107 +84,103 @@ export function ProductControls({
   }
 
   return (
-    <aside className="flex w-full shrink-0 flex-col gap-4 rounded-xl border border-zinc-800 bg-zinc-900 p-4 md:w-72">
-      <h2 className="text-sm font-medium text-zinc-300">{product.name}</h2>
-
-      <Field label="Product">
-        <select
-          value={productId}
-          onChange={(e) => onProductChange(e.target.value)}
-          className="rounded-lg border border-zinc-700 bg-zinc-950 px-2 py-1.5 text-sm text-zinc-200"
-        >
-          {products.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.name}
-            </option>
-          ))}
-        </select>
-      </Field>
-
-      <Field label="Variant">
-        <select
-          value={variantIndex}
-          onChange={(e) => onVariantChange(Number(e.target.value))}
-          className="rounded-lg border border-zinc-700 bg-zinc-950 px-2 py-1.5 text-sm text-zinc-200"
-        >
-          {product.variants.map((v, i) => (
-            <option key={v.label} value={i}>
-              {v.label}
-            </option>
-          ))}
-        </select>
-      </Field>
-
-      <Divider />
-
-      <Field label="Display">
-        <div className="flex overflow-hidden rounded-lg border border-zinc-700 text-sm">
-          <button
-            onClick={() => onKindChange('model')}
-            className={`flex-1 px-3 py-1.5 transition ${
-              kind === 'model' ? 'bg-zinc-700 text-white' : 'bg-zinc-950 text-zinc-400 hover:bg-zinc-800'
-            }`}
-          >
-            3D Model
-          </button>
-          <button
-            onClick={() => onKindChange('image')}
-            className={`flex-1 px-3 py-1.5 transition ${
-              kind === 'image' ? 'bg-zinc-700 text-white' : 'bg-zinc-950 text-zinc-400 hover:bg-zinc-800'
-            }`}
-          >
-            Render
-          </button>
+    <aside className="w-full rounded-[24px] border border-zinc-800 bg-zinc-900 p-5 lg:max-w-[390px] lg:p-6">
+      {/* Sidebar header */}
+      <div className="flex items-start justify-between border-b border-zinc-800 pb-5">
+        <div>
+          <p className="font-mono text-[10px] tracking-[0.22em] text-zinc-500">Configuration</p>
+          <h2 className="mt-1 text-xl font-semibold tracking-[-0.03em] text-zinc-100">N-04 / {product.name}</h2>
         </div>
-      </Field>
+        <span className="flex items-center gap-1.5 text-xs text-emerald-400">
+          <span className="h-2 w-2 rounded-full bg-emerald-400" />
+          Live
+        </span>
+      </div>
 
-      <Field label="Color">
-        <div className="flex items-center gap-1.5">
-          {SWATCHES.map((s) => (
-            <button
-              key={s.name}
-              title={s.name}
-              onClick={() => onColorChange(s.value)}
-              className={`h-6 w-6 rounded-full border border-zinc-600 transition ${
-                color === s.value ? 'ring-2 ring-white ring-offset-1 ring-offset-zinc-900' : 'hover:scale-110'
-              }`}
-              style={
-                s.value
-                  ? { backgroundColor: s.value }
-                  : { background: 'linear-gradient(135deg, #fafafa 45%, #ef4444 45%, #ef4444 55%, #fafafa 55%)' }
-              }
+      {/* Option groups */}
+      <div className="flex flex-col gap-7 py-6">
+        {/* Product group */}
+        <div>
+          <div className="mb-3 flex items-center justify-between">
+            <label className="text-sm font-semibold capitalize text-zinc-100">product</label>
+            <span className="font-mono text-[10px] text-zinc-500">01 / 03</span>
+          </div>
+          <div className="flex flex-col gap-2">
+            {products.map((p) => (
+              <OptionRow
+                key={p.id}
+                label={p.name}
+                selected={p.id === productId}
+                onClick={() => onProductChange(p.id)}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Variant group */}
+        <div>
+          <div className="mb-3 flex items-center justify-between">
+            <label className="text-sm font-semibold capitalize text-zinc-100">variant</label>
+            <span className="font-mono text-[10px] text-zinc-500">02 / 03</span>
+          </div>
+          <div className="flex flex-col gap-2">
+            {product.variants.map((v, i) => (
+              <OptionRow
+                key={v.label}
+                label={v.label}
+                selected={i === variantIndex}
+                onClick={() => onVariantChange(i)}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Display group */}
+        <div>
+          <div className="mb-3 flex items-center justify-between">
+            <label className="text-sm font-semibold capitalize text-zinc-100">display</label>
+            <span className="font-mono text-[10px] text-zinc-500">03 / 03</span>
+          </div>
+          <div className="flex flex-col gap-2">
+            <OptionRow
+              label="3D Model"
+              selected={kind === 'model'}
+              onClick={() => onKindChange('model')}
             />
-          ))}
-          <label
-            title="Custom color"
-            className="relative h-6 w-6 cursor-pointer overflow-hidden rounded-full border border-zinc-600"
-            style={{ backgroundColor: color ?? '#ffffff' }}
-          >
-            <input
-              type="color"
-              value={color ?? '#ffffff'}
-              onChange={(e) => onColorChange(e.target.value)}
-              className="absolute inset-0 cursor-pointer opacity-0"
+            <OptionRow
+              label="Rendered image"
+              selected={kind === 'image'}
+              onClick={() => onKindChange('image')}
             />
-          </label>
+          </div>
         </div>
-      </Field>
+      </div>
 
-      <Divider />
-
-      <button
-        onClick={handleDownload}
-        disabled={!downloadUrl || downloading}
-        className="rounded-lg bg-zinc-800 px-3 py-2 text-sm text-zinc-100 transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-40"
-      >
-        {downloading ? 'Downloading…' : 'Download render'}
-      </button>
-
-      {downloadError && (
-        <div className="rounded-lg border border-red-900 bg-red-950/50 p-3 text-sm text-red-300">
-          Download failed: {downloadError}
+      {/* Config index + download */}
+      <div className="border-t border-zinc-800 pt-5">
+        <div className="mb-4 flex items-center justify-between">
+          <span className="text-xs text-zinc-500">Configuration index</span>
+          <span className="font-mono text-xs font-medium text-zinc-300">{configIndex}</span>
         </div>
-      )}
+
+        <button
+          onClick={handleDownload}
+          disabled={!downloadUrl || downloading}
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-zinc-800 px-4 py-3 text-sm font-medium text-zinc-100 transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          <div className="h-4 w-4 rounded bg-zinc-600" />
+          {downloading ? 'Downloading…' : 'Download preloaded image'}
+        </button>
+        <p className="mt-3 text-center text-[11px] leading-5 text-zinc-500">
+          Image download only. 3D source files are not downloadable.
+        </p>
+
+        {downloadError && (
+          <div className="mt-3 rounded-lg border border-red-900 bg-red-950/50 p-3 text-sm text-red-300">
+            Download failed: {downloadError}
+          </div>
+        )}
+      </div>
     </aside>
   )
 }

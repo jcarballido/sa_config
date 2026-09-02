@@ -5,22 +5,29 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1787453318627,
-      "tag": "0000_absurd_newton_destine",
+      "when": 1788051618020,
+      "tag": "0000_volatile_timeslip",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1787455143526,
-      "tag": "0001_remarkable_darkhawk",
+      "when": 1788052392142,
+      "tag": "0001_add_config_category_trigger",
       "breakpoints": true
     },
     {
       "idx": 2,
       "version": "7",
-      "when": 1787536106109,
-      "tag": "0002_illegal_captain_flint",
+      "when": 1788058775487,
+      "tag": "0002_heavy_lionheart",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1788061369924,
+      "tag": "0003_sort_config_signature_trigger",
       "breakpoints": true
     }
   ]

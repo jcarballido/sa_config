@@ -5,3 +5,4 @@ packages/server/storage/
 *.local
 packages/client/mock.tsx
 packages/client/public/*.glb
+packages/server/src/db/seed.ts

@@ -55,6 +55,7 @@ const AppGate = () => {
     return (
       <>
         <App /> 
+        {/* <LoadingScreen isLeaving={isLeaving} /> */}
         { authStatus.status !== "unauthenticated" && showSplash && <LoadingScreen isLeaving={isLeaving} />}
       </>
     )

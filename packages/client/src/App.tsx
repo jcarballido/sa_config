@@ -42,31 +42,32 @@ export default function App() {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-100">
+    <main className="h-screen flex flex-col w-screen overflow-hidden bg-zinc-950 text-zinc-100 absolute">
       {/* Header */}
-      <header className="flex items-center justify-between border-b border-zinc-800 px-6 py-5 lg:px-10">
+      <header className="grow-0 flex items-center justify-between border-b border-zinc-800 px-4 py-2 lg:px-6">
         <div className="flex items-center gap-3">
           {/* Placeholder for brand icon */}
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800">
-            <div className="h-4 w-4 rounded bg-zinc-600" />
+            
+            <div className="h-4 w-4 rounded bg-[rgb(251,44,54)]" />
           </div>
           <div>
-            <p className="font-mono text-[10px] tracking-[0.22em] text-zinc-500">sa_config</p>
-            <h1 className="text-sm font-semibold tracking-tight text-zinc-100">Security Product Configurator</h1>
+            <p className="font-mono text-[18px] tracking-[0.22em] text-zinc-100">sa_config</p>
+            <h1 className="text-xs font-semibold tracking-tight  text-zinc-500">Security Product Configurator</h1>
           </div>
         </div>
         {/* <span className="hidden text-xs text-zinc-500 sm:block">Unsaved configuration</span> */}
       </header>
 
       {/* Main content */}
-      <div className="mx-auto flex max-w-375 flex-col gap-6 p-5 lg:flex-row lg:p-8">
+      <div className="flex grow w-full flex-col gap-6 p-3 lg:flex-row lg:p-6">
         {/* Left section */}
         <section className="flex min-w-0 flex-1 flex-col gap-4">
           {/* Title row with mode switch */}
           <div className="flex items-end justify-between">
             <div>
               <p className="font-mono text-[10px] tracking-[0.22em] text-zinc-500">Product / {product.id.toUpperCase()}</p>
-              <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-zinc-100">Shape your object</h2>
+              <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-zinc-100">Build the safe</h2>
             </div>
             <div className="flex overflow-hidden rounded-lg border border-zinc-700 text-sm">
               <button
@@ -111,14 +112,14 @@ export default function App() {
 
         {/* Right sidebar */}
         <ProductControls
-          products={PRODUCTS}
-          productId={product.id}
-          onProductChange={handleProductChange}
-          variantIndex={variantIndex}
-          onVariantChange={handleVariantChange}
-          kind={kind}
-          onKindChange={setKind}
-          downloadUrl={activeUrl}
+          // products={PRODUCTS}
+          // productId={product.id}
+          // onProductChange={handleProductChange}
+          // variantIndex={variantIndex}
+          // onVariantChange={handleVariantChange}
+          // kind={kind}
+          // onKindChange={setKind}
+          // downloadUrl={activeUrl}
         />
       </div>
     </main>

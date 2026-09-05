@@ -37,7 +37,7 @@ const activeUrl = "model"
         {/* Live preview badge */}
         <div className="absolute left-6 top-6 z-10 flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-2 text-xs font-medium text-[#c6c0b8] backdrop-blur">
           <div className="h-3.5 w-3.5 rounded bg-zinc-600" />
-          LIVE PREVIEW
+          PREVIEW
         </div>
         {/* Icon button placeholders */}
         <div className="absolute right-5 top-5 z-10 flex gap-2">
@@ -67,13 +67,13 @@ const activeUrl = "model"
 
   if (kind === 'model') {
     return (
-      <div className="relative min-h-130 flex-1 overflow-hidden rounded-[28px] border-2  bg-[#171717] shadow-[0_24px_80px_rgba(0,0,0,0.35)] border-orange-500">
+      <div className="relative min-h-130 flex-1 overflow-hidden rounded-[28px] border-2  bg-[#171717] shadow-[0_24px_80px_rgba(0,0,0,0.35)] border-[rgb(251,44,54)]">
         {/* Gradient background */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,#393632,transparent_38%),linear-gradient(145deg,#252525,#101010)]" />
         {/* Live preview badge */}
         <div className="absolute left-6 top-6 z-10 flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-2 text-xs font-medium text-[#c6c0b8] backdrop-blur">
-          <div className="h-3.5 w-3.5 rounded bg-zinc-600" />
-          LIVE PREVIEW
+          {/* <div className="h-3.5 w-3.5 rounded bg-zinc-600" /> */}
+          PREVIEW
         </div>
         {/* Icon button placeholders */}
         <div className="absolute right-5 top-5 z-10 flex gap-2">
@@ -98,7 +98,7 @@ const activeUrl = "model"
             <Suspense fallback={null}>
               <ModelViewer url={modelUrl!} color={color} />
             </Suspense>
-            <OrbitControls enablePan={false} minDistance={0.5} maxDistance={20} minPolarAngle={0.65} maxPolarAngle={1.45} />
+            <OrbitControls enablePan={false} minDistance={2} maxDistance={3} minPolarAngle={0.65} maxPolarAngle={1.5} />
           </Canvas>
         </ErrorBoundary>
       </div>

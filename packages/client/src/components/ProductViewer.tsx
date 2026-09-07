@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { ModelViewer } from './ModelViewer'
 import { ErrorBoundary } from './ErrorBoundary'
+import { useAppStore } from '../stores/app.store'
 
 type ProductViewerProps = {
   label: string
@@ -21,9 +22,12 @@ function PreviewError({ message }: { message: string }) {
 }
 
 export function ProductViewer({ label, modelUrl, imageUrl, kind, color }: ProductViewerProps) {
+  const { configurations } = useAppStore()
   const [imageError, setImageError] = useState(false)
   // const activeUrl = kind === 'model' ? modelUrl : imageUrl
-const activeUrl = "model"
+  const activeUrl = "model"
+  console.log("CONFIGURATIONS:")
+  console.log(configurations)
   useEffect(() => {
     setImageError(false)
   }, [imageUrl])

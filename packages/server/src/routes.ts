@@ -6,6 +6,11 @@ import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import z from 'zod'
 import { supabase } from './supabase/supabase.js'
+import { db } from './db/db.js'
+import { configurations } from './db/schemas/configurations.js'
+import { assets } from './db/schemas/assets.js'
+import { categories } from './db/schemas/categories.js'
+
 export async function registerRoutes(app: FastifyInstance) {
   app.get("/test",async(request,reply) => {
   const S3 = new S3Client({
@@ -25,7 +30,7 @@ export async function registerRoutes(app: FastifyInstance) {
   );
 })
 
-app.post("/login/requestAccess", async(request,reply) => {
+  app.post("/login/requestAccess", async(request,reply) => {
     console.log("Request: requestMagicLink")
     console.log(request.body)
     const AccessRequest = z.object({email: z.string()})
@@ -125,6 +130,43 @@ app.post("/login/requestAccess", async(request,reply) => {
   //     return reply.code(404).send({ error: 'file missing on disk' })
   //   }
   // })
+  
+  app.get("/assets/configurations", async(request, reply) => {
+    console.log("GET configurations requested.")
+    const result = await db.select().from(configurations)
+    console.log("RESULT:")
+    console.log(result)
+    return result
+  })
+
+  // export const assets = table('assets', {
+  //   id: uuid('id').defaultRandom().primaryKey(),
+  //   hash: varchar('hash').unique().notNull(),
+  //   storageKey: varchar('storage_key').unique().notNull(),
+  //   mime: varchar('mime', { length: 64 }).notNull(),
+  //   type: varchar('type', { length: 16 }).notNull(),
+  //   size: integer('size').notNull(),
+  //   categoryId: uuid('category_id').references( () => categories.id)
+  // })
+  
+
+  app.get("/assets/assets", async(request,reply) => {
+    console.log("GET assets requested.")
+    const result = await db
+      .select({
+       id: assets.id,
+       storageKey: assets.storageKey,
+       category: categories.name
+      })
+      .from(assets)
+      .innerJoin(
+        categories,
+        eq(assets.categoryId,categories.id)
+      ) 
+    console.log("RESULT:")
+    console.log(result)
+    return result
+  })
 
   return app
 }

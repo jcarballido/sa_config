@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import type { Product } from '../viewerConfig'
 import OptionRow from '../features/configMenu/OptionRow'
+import { useAppStore } from '../stores/app.store'
+import type { Assets } from '../api/types'
 
 type ProductControlsProps = {
   // products: Product[]
@@ -54,6 +56,22 @@ type ProductControlsProps = {
 //   )
 // }
 
+function SidebarHeader(){
+  return(
+  <div className="flex items-start justify-between border-b border-zinc-800 pb-5">
+    <div>
+      <p className="font-mono text-[10px] tracking-[0.22em] text-zinc-500">Configuration</p>
+      <h2 className="mt-1 text-xl font-semibold tracking-[-0.03em] text-zinc-100">PRODUCT NAME</h2>
+    </div>
+    {/* <span className="flex items-center gap-1.5 text-xs text-emerald-400">
+      <span className="h-2 w-2 rounded-full bg-emerald-400" />
+      Live
+    </span> */}
+  </div>  
+  )
+  {/* Sidebar header */}
+}
+
 export function ProductControls({
   // products,
   // productId,
@@ -67,6 +85,18 @@ export function ProductControls({
   // const [downloading, setDownloading] = useState(false)
   // const [downloadError, setDownloadError] = useState<string | null>(null)
   // const product = products.find((p) => p.id === productId) ?? products[0]
+  const { assets } = useAppStore()
+  const groups = new Map<string, Assets>()
+  for(const asset of assets){
+    const group = groups.get(asset.category)
+    if(group){
+      group.push(asset)
+    }else{
+      groups.set(asset.category,[asset])
+    }
+  }
+  console.log("GROUPS:")
+  console.log(Array.from(groups))
   const productId = 0
   const products = [{id:0,name:"One"},{id:1,name:"Two"},{id:3,name:"Three"}]
   const product = products.find((p) => p.id === productId) ?? products[0]
@@ -90,22 +120,30 @@ export function ProductControls({
 
   return (
     <aside className="w-full rounded-3xl border border-zinc-800 bg-zinc-900 p-5 lg:max-w-97.5 lg:p-6">
-      {/* Sidebar header */}
-      <div className="flex items-start justify-between border-b border-zinc-800 pb-5">
-        <div>
-          <p className="font-mono text-[10px] tracking-[0.22em] text-zinc-500">Configuration</p>
-          <h2 className="mt-1 text-xl font-semibold tracking-[-0.03em] text-zinc-100">PRODUCT NAME</h2>
-        </div>
-        {/* <span className="flex items-center gap-1.5 text-xs text-emerald-400">
-          <span className="h-2 w-2 rounded-full bg-emerald-400" />
-          Live
-        </span> */}
-      </div>
-
+      <SidebarHeader />
       {/* Option groups */}
       <div className="flex flex-col gap-7 py-6">
+          {
+            Array.from(groups,([category, assets]) =>{
+              return (
+                <div>
+                  <div className="mb-3 flex items-center justify-between">
+                    <label className="text-sm font-semibold capitalize text-zinc-100">{category}</label>
+                  </div>
+                  <div className="flex flex-col gap-4 border">
+                  {
+                    assets.map((asset,index) => {
+                      return (
+                          <OptionRow key={index} label={category} />
+                        )
+                      })
+                    }
+                    </div>
+                </div>
+            )})
+          }
         {/* Product group */}
-        <div>
+        {/* <div>
           <div className="mb-3 flex items-center justify-between">
             <label className="text-sm font-semibold capitalize text-zinc-100">PRODUCT</label>
             <span className="font-mono text-[10px] text-zinc-500">UNKOWN</span>
@@ -121,15 +159,15 @@ export function ProductControls({
               />
             ))}
           </div>
-        </div>
+        </div> */}
 
         {/* Variant group */}
-        <div>
+        {/* <div>
           <div className="mb-3 flex items-center justify-between">
             <label className="text-sm font-semibold capitalize text-zinc-100">variant</label>
             <span className="font-mono text-[10px] text-zinc-500">02 / 03</span>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2"> */}
             {/* {product.variants.map((v, i) => (
               <OptionRow
                 key={v.label}
@@ -138,16 +176,16 @@ export function ProductControls({
                 // onClick={() => onVariantChange(i)}
               />
             ))} */}
-          </div>
-        </div>
+          {/* </div>
+        </div> */}
 
         {/* Display group */}
-        <div>
+        {/* <div>
           <div className="mb-3 flex items-center justify-between">
             <label className="text-sm font-semibold capitalize text-zinc-100">display</label>
             <span className="font-mono text-[10px] text-zinc-500">03 / 03</span>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2"> */}
             {/* <OptionRow
               label="3D Model"
               selected={kind === 'model'}
@@ -158,9 +196,9 @@ export function ProductControls({
               selected={kind === 'image'}
               onClick={() => onKindChange('image')}
             /> */}
-          </div>
-        </div>
-      </div>
+          {/* </div>
+        </div>*/}
+      </div> 
 
       {/* Config index + download */}
       <div className="border-t border-zinc-800 pt-5">

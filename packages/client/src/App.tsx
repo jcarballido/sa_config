@@ -4,9 +4,12 @@ import { ProductControls } from './components/ProductControls'
 import { Login } from './components/Login'
 import { useAuthStore } from './stores/auth.store'
 import { PRODUCTS } from './viewerConfig'
+// import { getConfigurations } from './api/configurations.api'
+import { useAppStore } from './stores/app.store'
 
 export default function App() {
   const { authStatus } = useAuthStore()
+  const { initialize, initialized } = useAppStore()
   const [productId, setProductId] = useState(PRODUCTS[0].id)
   const [variantIndex, setVariantIndex] = useState(0)
   const [kind, setKind] = useState<'model' | 'image'>('model')
@@ -37,9 +40,28 @@ export default function App() {
     }
   }, [authStatus.status])
 
+  // useEffect(() =>{
+  //   const t = async() => {
+  //     console.log("GET CONFIGURATIONS...")
+  //     console.log(await getConfigurations())
+  //   }
+  //   if(authStatus.status === 'authenticated'){
+  //     t()
+  //   }
+  // })
+
+  useEffect(() => {
+    if(!initialized && authStatus.user){
+      initialize()
+    }
+  },[authStatus.user])
+  
+
   if (authStatus.status === 'unauthenticated') {
     return <Login />
   }
+
+
 
   return (
     <main className="h-screen flex flex-col w-screen overflow-hidden bg-zinc-950 text-zinc-100 absolute">

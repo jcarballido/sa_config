@@ -9,3 +9,5 @@ export const configurations = table('configurations', {
   modelNumber: varchar('model_number').unique(),
   signature: uuid('signature').array().unique()
 })
+
+export const Configuration = configurations.$inferSelect

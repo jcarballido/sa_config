@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { sendMagicLink } from '../api/auth'
+import { sendMagicLink } from '../api/auth.api'
 import { Message } from './Message'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -31,6 +31,8 @@ export function Login() {
       await Promise.all([sendMagicLink(trimmed), sleep(MIN_FEEDBACK_DELAY)])
       setSubmitted(true)
     } catch (err) {
+      console.log("ERR:")
+      console.log(err)
       setError(String(err))
     } finally {
       setSubmitting(false)

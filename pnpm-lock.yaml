@@ -92,7 +92,7 @@ importers:
         version: 16.6.1
       drizzle-orm:
         specifier: ^0.44.2
-        version: 0.44.7(@types/pg@8.21.0)(pg@8.22.0)(postgres@3.4.9)
+        version: 0.44.7(@cloudflare/workers-types@5.20260908.1)(@types/pg@8.21.0)(pg@8.22.0)(postgres@3.4.9)
       fastify:
         specifier: ^5.6.1
         version: 5.11.3
@@ -123,10 +123,14 @@ importers:
         version: 6.0.3
 
   packages/worker:
+    dependencies:
+      jose:
+        specifier: ^6.2.12
+        version: 6.2.12
     devDependencies:
       wrangler:
         specifier: ^4.129.1
-        version: 4.129.1
+        version: 4.129.1(@cloudflare/workers-types@5.20260908.1)
 
 packages:
 
@@ -252,6 +256,9 @@ packages:
     engines: {node: '>=16'}
     cpu: [x64]
     os: [win32]
+
+  '@cloudflare/workers-types@5.20260908.1':
+    resolution: {integrity: sha512-cILmYEd/YtL+Hlwytc5n+QVV8F+E5doQOtc6QiBtPb51kK+5fkk909db+G8dxeUsMd2ytJgdpAt/lyciUEobcw==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -1721,6 +1728,9 @@ packages:
     resolution: {integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==}
     hasBin: true
 
+  jose@6.2.12:
+    resolution: {integrity: sha512-9NiFmJEex0sy2Dk58j2UGBSHgUs2ypF9eZSu4L6vjOX3Dp96Sw1F3uL+H+D1sx02jZZdzUT0HgvCy59CuvXcWw==}
+
   json-schema-ref-resolver@3.0.0:
     resolution: {integrity: sha512-hOrZIVL5jyYFjzk7+y7n5JDzGlU8rfWDuYyHwGa2WA8/pcmMHezp2xsVwxrebD/Q9t8Nc5DboieySDpCp4WG4A==}
 
@@ -2586,6 +2596,9 @@ snapshots:
     optional: true
 
   '@cloudflare/workerd-windows-64@1.20260907.1':
+    optional: true
+
+  '@cloudflare/workers-types@5.20260908.1':
     optional: true
 
   '@cspotcode/source-map-support@0.8.1':
@@ -3462,8 +3475,9 @@ snapshots:
       esbuild: 0.25.12
       tsx: 4.23.11
 
-  drizzle-orm@0.44.7(@types/pg@8.21.0)(pg@8.22.0)(postgres@3.4.9):
+  drizzle-orm@0.44.7(@cloudflare/workers-types@5.20260908.1)(@types/pg@8.21.0)(pg@8.22.0)(postgres@3.4.9):
     optionalDependencies:
+      '@cloudflare/workers-types': 5.20260908.1
       '@types/pg': 8.21.0
       pg: 8.22.0
       postgres: 3.4.9
@@ -3682,6 +3696,8 @@ snapshots:
       '@isaacs/cliui': 9.0.0
 
   jiti@2.7.0: {}
+
+  jose@6.2.12: {}
 
   json-schema-ref-resolver@3.0.0:
     dependencies:
@@ -4213,7 +4229,7 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20260907.1
       '@cloudflare/workerd-windows-64': 1.20260907.1
 
-  wrangler@4.129.1:
+  wrangler@4.129.1(@cloudflare/workers-types@5.20260908.1):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.5.0
       '@cloudflare/unenv-preset': 2.16.1(unenv@2.0.0-rc.24)(workerd@1.20260907.1)
@@ -4224,6 +4240,7 @@ snapshots:
       unenv: 2.0.0-rc.24
       workerd: 1.20260907.1
     optionalDependencies:
+      '@cloudflare/workers-types': 5.20260908.1
       fsevents: 2.3.3
     transitivePeerDependencies:
       - bufferutil

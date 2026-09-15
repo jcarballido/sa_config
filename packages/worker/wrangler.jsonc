@@ -3,6 +3,10 @@
   "main":"src/index.ts",
   "compatibility_date":"2026-09-07",
 
+  "cache":{
+    "enabled":true
+  },
+
   "r2_buckets":[
     {
       "binding":"ASSETS",

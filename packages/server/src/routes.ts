@@ -134,8 +134,8 @@ export async function registerRoutes(app: FastifyInstance) {
   app.get("/assets/configurations", async(request, reply) => {
     console.log("GET configurations requested.")
     const result = await db.select().from(configurations)
-    console.log("RESULT:")
-    console.log(result)
+    // console.log("RESULT:")
+    // console.log(result)
     return result
   })
 

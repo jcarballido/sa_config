@@ -3,6 +3,7 @@ import type { Product } from '../viewerConfig'
 import OptionRow from '../features/configMenu/OptionRow'
 import { useAppStore } from '../stores/app.store'
 import type { Assets } from '../api/types'
+import { useAuthStore } from '../stores/auth.store'
 
 type ProductControlsProps = {
   // products: Product[]
@@ -97,9 +98,9 @@ export function ProductControls({
   }
   console.log("GROUPS:")
   console.log(Array.from(groups))
-  const productId = 0
-  const products = [{id:0,name:"One"},{id:1,name:"Two"},{id:3,name:"Three"}]
-  const product = products.find((p) => p.id === productId) ?? products[0]
+  // const productId = 0
+  // const products = [{id:0,name:"One"},{id:1,name:"Two"},{id:3,name:"Three"}]
+  // const product = products.find((p) => p.id === productId) ?? products[0]
 
   // const activeVariant = product.variants[variantIndex] ?? product.variants[0]
 
@@ -118,11 +119,59 @@ export function ProductControls({
     // }
   }
 
+  async function handleTest() {
+    const token = useAuthStore.getState().authStatus.session?.access_token ?? null
+    if(!token){
+      console.log("Token not found")
+    }
+    console.log("TOKEN:")
+    console.log(token)
+    const res = await fetch('assets/cad/body/large/8e5bcd035c12caf111c8649a7fd8b31567e82b1a992af2eae54f3d5caf3e8f18.glb',{
+      method:"GET",
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    })
+    console.log("FILE SIZE:")
+    console.log(await res.text())
+    console.log("EXPECTED FILE SIZE:")
+    console.log("98.11KB")
+
+  }
+    async function handleSecondTest() {
+    const token = useAuthStore.getState().authStatus.session?.access_token ?? null
+    if(!token){
+      console.log("Token not found")
+    }
+    console.log("TOKEN:")
+    console.log(token)
+    try {
+      const res = await fetch('assets/cad/keypad/oval/277768eb11b5327b889acbbfb9f4f0501b1ff4468d56c02e23d9c9283294933d.glb',{
+        method:"GET",
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      })
+      console.log("FILE SIZE:")
+      console.log(res.text())
+      console.log("EXPECTED FILE SIZE:")
+      console.log("140.81KB")      
+    } catch (error) {
+      console.log("ERROR w FETCH:")
+      console.log(error)
+    }
+
+  }
+
+
+
   return (
     <aside className="w-full rounded-3xl border border-zinc-800 bg-zinc-900 p-5 lg:max-w-97.5 lg:p-6">
       <SidebarHeader />
       {/* Option groups */}
-      <div className="flex flex-col gap-7 py-6">
+      <div className="flex flex-col gap-7 py-6 border-2 border-pink-500">
+        <button className='border border-green-400' onClick={handleTest}>TEST 98.11KB</button>
+        <button className='border border-purple-400' onClick={handleSecondTest}>TEST 140.81KB</button>        
           {
             Array.from(groups,([category, assets]) =>{
               return (

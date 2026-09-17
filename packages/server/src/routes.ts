@@ -1,5 +1,5 @@
 import type { FastifyInstance } from 'fastify'
-import { and, asc, eq } from 'drizzle-orm'
+import { and, asc, eq, getTableColumns } from 'drizzle-orm'
 // import { db } from './db.js'
 // import { assets } from './schema.js'
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3'
@@ -154,9 +154,8 @@ export async function registerRoutes(app: FastifyInstance) {
     console.log("GET assets requested.")
     const result = await db
       .select({
-       id: assets.id,
-       storageKey: assets.storageKey,
-       category: categories.name
+        ...getTableColumns(assets),
+        category: categories.name
       })
       .from(assets)
       .innerJoin(

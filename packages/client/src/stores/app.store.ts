@@ -6,11 +6,13 @@ import { getAssests } from "../api/assets.api";
 type State = {
   initialized: boolean,
   configurations: Configurations,
-  assets: Assets
+  assets: Assets,
+  activeBody: string | null
 }
 
 type Action = {
-  initialize: () => Promise<void>
+  initialize: () => Promise<void>,
+  setActiveBody: (bodyHash: string) => void
 }
 
 export const useAppStore = create<State & Action>((set) => ({
@@ -24,6 +26,8 @@ export const useAppStore = create<State & Action>((set) => ({
       assets: [...assets]
     })
   },
+  activeBody: null,
   configurations:[],
-  assets:[]
+  assets:[],
+  setActiveBody: (hash) => set({activeBody: hash})
 }))

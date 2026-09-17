@@ -1,15 +1,24 @@
+import { useAppStore } from "../../stores/app.store"
+
 export default function OptionRow({
   label,
+  id
   // selected,
   // onClick,
 }: {
-  label: string
+  label: number,
+  id: string
   // selected: boolean
   // onClick: () => void
 }) {
+  const { setActiveBody } = useAppStore()
+  const onClick: React.MouseEventHandler = (e: React.MouseEvent) => {
+    e.preventDefault()
+    setActiveBody(id)
+  }
   return (
     <button
-      // onClick={onClick}
+      onClick={onClick}
       className={`flex w-full items-center justify-between rounded-lg border  px-4 py-3 text-sm font-medium transition   border-amber-200`}
         // ${
         //   selected

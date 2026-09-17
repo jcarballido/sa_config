@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
+import { useAppStore } from '../stores/app.store'
+import type { Assets } from '../api/types'
 
 type ModelViewerProps = {
   url: string
@@ -52,10 +54,29 @@ const Handle = ({mainScene, filePath}: any) => {
     return null
 }
 
-
-
 export function ModelViewer({ url, color }: ModelViewerProps) {
-  const { scene } = useGLTF("/Large_Housing_w_Mount_v1.glb");
+    const { assets, activeBody } = useAppStore()
+    const ids = new Map<string, Assets>
+    for(const asset of assets){
+        const id = ids.get(asset.id)
+        if(id){
+            return
+        }else{
+        ids.set(asset.id,[asset])
+        }
+    }
+    console.log("ID MAPS:")
+    console.log(ids)
+    let storageKey: string 
+    if(activeBody){
+        const asset = ids.get(activeBody)
+        if(!asset) console.log("ERROR GETTING ASSET FROM MAP")
+        else console.log("ASSET: ",asset)
+        storageKey = asset![0].storageKey.replace("products/","")
+    }
+    else return
+
+  const { scene } = useGLTF(`assets/${storageKey}`);
   const bodyHinge = scene.getObjectByName("Body_Hinge_Pivot-1");
   const door = scene.getObjectByName("Small_Door_w_Mount");
 

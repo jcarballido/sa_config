@@ -24,11 +24,11 @@ export const Configurations = z.array(z.object({
 
 export const Assets = z.array(z.object({
   id: z.uuid(),
-  // hash: z.string(),
-  // storageKey: z.string(),
-  // mime: z.string(),
-  // type:  z.string(),
-  // size: z.int(),
+  hash: z.string(),
+  storageKey: z.string(),
+  mime: z.string(),
+  type:  z.string(),
+  size: z.int(),
   category: z.string()
 }))
 

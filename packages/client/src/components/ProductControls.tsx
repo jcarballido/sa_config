@@ -170,8 +170,6 @@ export function ProductControls({
       <SidebarHeader />
       {/* Option groups */}
       <div className="flex flex-col gap-7 py-6 border-2 border-pink-500">
-        <button className='border border-green-400' onClick={handleTest}>TEST 98.11KB</button>
-        <button className='border border-purple-400' onClick={handleSecondTest}>TEST 140.81KB</button>        
           {
             Array.from(groups,([category, assets]) =>{
               return (
@@ -183,7 +181,7 @@ export function ProductControls({
                   {
                     assets.map((asset,index) => {
                       return (
-                          <OptionRow key={index} label={category} />
+                          <OptionRow key={index} label={asset.size} id={asset.id}/>
                         )
                       })
                     }

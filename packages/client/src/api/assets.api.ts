@@ -1,14 +1,19 @@
 import { useAuthStore } from "../stores/auth.store";
 import http from "./client";
-import { Assets } from "./types";
+import { type AssetMetadata, AssetMetadataArraySchema } from "./types";
 
-export async function getAssests(): Promise<Assets>{
+type AssetMetadataMap = Map<AssetMetadata['id'],AssetMetadata>
+
+export async function getAssestMetadata(): Promise<AssetMetadataMap>{
   const token = useAuthStore.getState().authStatus.session?.access_token
   if(!token) throw new Error("Unauthorized.")
-  const response = await http.getPrivate<Assets>('api/assets/assets',token)
-  const result = Assets.safeParse(response)
+  const response = await http.getPrivate<AssetMetadata[]>('api/assets/assets',token)
+  const result = AssetMetadataArraySchema.safeParse(response)
   if(!result.success) throw new Error("Response violated contract for request: getAssets.")
-  console.log("ASSET DATA:")
-  console.log(result.data)
-  return result.data
+  const map: AssetMetadataMap = new Map()
+  for(const asset of result.data){
+    map.set(asset["id"], asset)
+  }
+
+  return map
 }

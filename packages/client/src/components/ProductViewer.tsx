@@ -26,8 +26,8 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, color }: Produc
   const [imageError, setImageError] = useState(false)
   // const activeUrl = kind === 'model' ? modelUrl : imageUrl
   const activeUrl = "model"
-  console.log("CONFIGURATIONS:")
-  console.log(configurations)
+  // console.log("CONFIGURATIONS:")
+  // console.log(configurations)
   useEffect(() => {
     setImageError(false)
   }, [imageUrl])

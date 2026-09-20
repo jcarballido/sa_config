@@ -55,41 +55,41 @@ const Handle = ({mainScene, filePath}: any) => {
 }
 
 export function ModelViewer({ url, color }: ModelViewerProps) {
-    const { assets, activeBody } = useAppStore()
-    const ids = new Map<string, Assets>
-    for(const asset of assets){
-        const id = ids.get(asset.id)
-        if(id){
-            return
-        }else{
-        ids.set(asset.id,[asset])
-        }
-    }
-    console.log("ID MAPS:")
-    console.log(ids)
-    let storageKey: string 
-    if(activeBody){
-        const asset = ids.get(activeBody)
-        if(!asset) console.log("ERROR GETTING ASSET FROM MAP")
-        else console.log("ASSET: ",asset)
-        storageKey = asset![0].storageKey.replace("products/","")
-    }
-    else return
+    // const { assets, activeBody } = useAppStore()
+    // const ids = new Map<string, Assets>
+    // for(const asset of assets){
+    //     const id = ids.get(asset.id)
+    //     if(id){
+    //         return
+    //     }else{
+    //     ids.set(asset.id,[asset])
+    //     }
+    // }
+    // console.log("ID MAPS:")
+    // console.log(ids)
+    // let storageKey: string 
+    // if(activeBody){
+    //     const asset = ids.get(activeBody)
+    //     if(!asset) console.log("ERROR GETTING ASSET FROM MAP")
+    //     else console.log("ASSET: ",asset)
+    //     storageKey = asset![0].storageKey.replace("products/","")
+    // }
+    // else return
 
-  const { scene } = useGLTF(`assets/${storageKey}`);
-  const bodyHinge = scene.getObjectByName("Body_Hinge_Pivot-1");
-  const door = scene.getObjectByName("Small_Door_w_Mount");
+//   const { scene } = useGLTF(`assets/${storageKey}`);
+//   const bodyHinge = scene.getObjectByName("Body_Hinge_Pivot-1");
+//   const door = scene.getObjectByName("Small_Door_w_Mount");
 
-  useEffect(() => {
-    if (!bodyHinge || !door) return;
-    const originalParent = door.parent;
-    bodyHinge.attach(door);
-    return () => {
-        if (originalParent) {
-            originalParent.attach(door);
-        }
-    };
-},[bodyHinge, door])
+//   useEffect(() => {
+//     if (!bodyHinge || !door) return;
+//     const originalParent = door.parent;
+//     bodyHinge.attach(door);
+//     return () => {
+//         if (originalParent) {
+//             originalParent.attach(door);
+//         }
+//     };
+// },[bodyHinge, door])
 
 //   useFrame((_, delta) => {
 //     if (!bodyHinge) return;
@@ -101,9 +101,9 @@ export function ModelViewer({ url, color }: ModelViewerProps) {
   
   return (
     <>
-        <primitive object={scene} />
+        {/* <primitive object={scene} />
         <Keypad mainScene={scene} filePath={'/Touch_Keypad_v7.glb'}/>
-        <Handle mainScene={scene} filePath={'/Spoke_Hub_3_v1.glb'} />
+        <Handle mainScene={scene} filePath={'/Spoke_Hub_3_v1.glb'} /> */}
     </>
   )
   // const { scene } = useGLTF(url)

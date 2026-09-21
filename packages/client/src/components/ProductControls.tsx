@@ -4,6 +4,7 @@ import OptionRow from '../features/configMenu/OptionRow'
 import { useAppStore } from '../stores/app.store'
 // import type { Assets } from '../api/types'
 import { useAuthStore } from '../stores/auth.store'
+import type { AssetMetadata, AssetMetadataArray } from '../api/types'
 
 type ProductControlsProps = {
   // products: Product[]
@@ -87,17 +88,20 @@ export function ProductControls({
   // const [downloadError, setDownloadError] = useState<string | null>(null)
   // const product = products.find((p) => p.id === productId) ?? products[0]
   // const { assets } = useAppStore()
-  // const groups = new Map<string, Assets>()
-  // for(const asset of assets){
-  //   const group = groups.get(asset.category)
-  //   if(group){
-  //     group.push(asset)
-  //   }else{
-  //     groups.set(asset.category,[asset])
-  //   }
-  // }
-  // console.log("GROUPS:")
-  // console.log(Array.from(groups))
+  const { assetMetadata } = useAppStore()
+  const groups = new Map<string, AssetMetadataArray>()
+  if(assetMetadata){
+    for(const asset of assetMetadata.values()){
+      const group = groups.get(asset.category)
+      if(group){
+        group.push(asset)
+      }else{
+        groups.set(asset.category,[asset])
+      }
+    }
+  }
+  console.log("GROUPS:")
+  console.log(Array.from(groups))
   // const productId = 0
   // const products = [{id:0,name:"One"},{id:1,name:"Two"},{id:3,name:"Three"}]
   // const product = products.find((p) => p.id === productId) ?? products[0]
@@ -170,10 +174,10 @@ export function ProductControls({
       <SidebarHeader />
       {/* Option groups */}
       <div className="flex flex-col gap-7 py-6 border-2 border-pink-500">
-          {/* {
-            Array.from(groups,([category, assets]) =>{
+          {
+            Array.from(groups,([category, assets],index) =>{
               return (
-                <div>
+                <div key={index}>
                   <div className="mb-3 flex items-center justify-between">
                     <label className="text-sm font-semibold capitalize text-zinc-100">{category}</label>
                   </div>
@@ -188,7 +192,7 @@ export function ProductControls({
                     </div>
                 </div>
             )})
-          } */}
+          }
         {/* Product group */}
         {/* <div>
           <div className="mb-3 flex items-center justify-between">

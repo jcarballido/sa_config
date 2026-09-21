@@ -1,3 +1,4 @@
+import { getAsset } from "../../assets/assetCache"
 import { useAppStore } from "../../stores/app.store"
 
 export default function OptionRow({
@@ -11,10 +12,13 @@ export default function OptionRow({
   // selected: boolean
   // onClick: () => void
 }) {
-  const { setActiveBody } = useAppStore()
-  const onClick: React.MouseEventHandler = (e: React.MouseEvent) => {
+  // const { setActiveBody } = useAppStore()
+  const onClick: React.MouseEventHandler = async (e: React.MouseEvent) => {
     e.preventDefault()
-    setActiveBody(id)
+    // setActiveBody(id)
+    const r = await getAsset(id)
+    console.log("GET ASSET RESULT:")
+    console.log(r)
   }
   return (
     <button

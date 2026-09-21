@@ -1,5 +1,4 @@
 import { getToken } from "../api/authAdapter"
-import http from "../api/client"
 import type { AssetMetadata } from "../api/types"
 import { useAppStore } from "../stores/app.store"
 

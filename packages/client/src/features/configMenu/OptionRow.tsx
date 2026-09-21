@@ -1,25 +1,29 @@
+import type { AssetMetadata } from "../../api/types"
 import { getAsset } from "../../assets/assetCache"
 import { useAppStore } from "../../stores/app.store"
 
 export default function OptionRow({
   label,
-  id
+  id,
+  category
   // selected,
   // onClick,
 }: {
   label: number,
-  id: string
+  id: string,
+  category: AssetMetadata["category"]
   // selected: boolean
   // onClick: () => void
 }) {
+  const { activeSelection,setActiveSelection } = useAppStore()
   // const { setActiveBody } = useAppStore()
   const onClick: React.MouseEventHandler = async (e: React.MouseEvent) => {
     e.preventDefault()
     // setActiveBody(id)
+    setActiveSelection(id, category)
     const r = await getAsset(id)
-    console.log("GET ASSET RESULT:")
-    console.log(r)
   }
+  
   return (
     <button
       onClick={onClick}

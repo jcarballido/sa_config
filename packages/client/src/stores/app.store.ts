@@ -17,6 +17,7 @@ type State = {
 
 type Action = {
   initialize: () => Promise<void>,
+  setActiveSelection: (assetId: string, category: string) => void
 }
 
 export const useAppStore = create<State & Action>((set) => ({
@@ -60,5 +61,32 @@ export const useAppStore = create<State & Action>((set) => ({
     entry: null,
     handle: null
   },
-  activeConfiguration: null
+  activeConfiguration: null,
+  setActiveSelection: (assetId, category) => {
+    if(category === "Body"){
+      set((state) => ({
+        activeSelection:{
+          ...state.activeSelection,
+          body: assetId
+        }
+      }))
+    } else if(category === "Handle"){
+      set((state) => ({
+        activeSelection:{
+          ...state.activeSelection,
+          handle: assetId
+        }
+      }))
+    } else if(category === "Entry"){
+      set((state) => ({
+        activeSelection:{
+          ...state.activeSelection,
+          entry: assetId
+        }
+      }))
+    }else {
+      console.log("INVALID CATEGORY")
+      return
+    }
+  }
 }))

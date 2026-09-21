@@ -67,7 +67,8 @@ export default {
     }
     return new Response(asset.body,{
       headers:{
-        "Cache-Control":"private, max-age=86400, immutable"
+        "Content-Type":"model/gltf-binary",
+        "Cache-Control":"private, max-age=60, immutable"
       }
     });
   },

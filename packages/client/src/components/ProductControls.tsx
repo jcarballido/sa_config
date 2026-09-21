@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Product } from '../viewerConfig'
 import OptionRow from '../features/configMenu/OptionRow'
 import { useAppStore } from '../stores/app.store'
@@ -88,7 +88,7 @@ export function ProductControls({
   // const [downloadError, setDownloadError] = useState<string | null>(null)
   // const product = products.find((p) => p.id === productId) ?? products[0]
   // const { assets } = useAppStore()
-  const { assetMetadata } = useAppStore()
+  const { assetMetadata, activeSelection } = useAppStore()
   const groups = new Map<string, AssetMetadataArray>()
   if(assetMetadata){
     for(const asset of assetMetadata.values()){
@@ -102,6 +102,10 @@ export function ProductControls({
   }
   console.log("GROUPS:")
   console.log(Array.from(groups))
+  useEffect(() => {
+    console.log("NEW ACTIVE SELECTION:")
+    console.log(activeSelection)
+  },[activeSelection])
   // const productId = 0
   // const products = [{id:0,name:"One"},{id:1,name:"Two"},{id:3,name:"Three"}]
   // const product = products.find((p) => p.id === productId) ?? products[0]
@@ -185,7 +189,7 @@ export function ProductControls({
                   {
                     assets.map((asset,index) => {
                       return (
-                          <OptionRow key={index} label={asset.size} id={asset.id}/>
+                          <OptionRow key={index} label={asset.size} id={asset.id} category={asset.category} />
                         )
                       })
                     }

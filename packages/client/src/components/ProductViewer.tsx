@@ -102,7 +102,7 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, color }: Produc
             <Suspense fallback={null}>
               <ModelViewer url={modelUrl!} color={color} />
             </Suspense>
-            <OrbitControls enablePan={false} minDistance={2} maxDistance={3} minPolarAngle={0.65} maxPolarAngle={1.5} />
+            <OrbitControls enablePan={false} minDistance={0.01} maxDistance={3} minPolarAngle={0.65} maxPolarAngle={1.5} />
           </Canvas>
         </ErrorBoundary>
       </div>

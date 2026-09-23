@@ -5,6 +5,7 @@ import { useAppStore } from '../stores/app.store'
 // import type { Assets } from '../api/types'
 import { useAuthStore } from '../stores/auth.store'
 import type { AssetMetadata, AssetMetadataArray } from '../api/types'
+import { assetCache } from '../assets/assetCache'
 
 type ProductControlsProps = {
   // products: Product[]
@@ -105,7 +106,9 @@ export function ProductControls({
   useEffect(() => {
     console.log("NEW ACTIVE SELECTION:")
     console.log(activeSelection)
-  },[activeSelection])
+    console.log("ASSET CACHE")
+    console.log(assetCache)
+  },[ activeSelection, assetCache ])
   // const productId = 0
   // const products = [{id:0,name:"One"},{id:1,name:"Two"},{id:3,name:"Three"}]
   // const product = products.find((p) => p.id === productId) ?? products[0]
@@ -170,8 +173,6 @@ export function ProductControls({
     }
 
   }
-
-
 
   return (
     <aside className="w-full rounded-3xl border border-zinc-800 bg-zinc-900 p-5 lg:max-w-97.5 lg:p-6">

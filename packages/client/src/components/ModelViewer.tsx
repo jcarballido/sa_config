@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { useAppStore } from '../stores/app.store'
 import type { Assets } from '../api/types'
+import { getAsset, type InMemoryAsset } from '../assets/assetCache'
+import type { GLTF } from 'three/examples/jsm/Addons.js'
 
 type ModelViewerProps = {
   url: string
@@ -33,63 +35,89 @@ const useAttachment = (scene, filePath: string, attachmentPointName, accessory) 
     },[scene,filePath])
 }
 
-const Keypad = ({mainScene, filePath}: any) => {
+const Keypad = ({mainScene, file}: any) => {
     console.log("Running Keypad component.")
-    if(!filePath) {
-        console.log("No PATH")
-        return null
-    }
-    console.log('Path found')
-    useAttachment(mainScene, filePath, 'Keypad_Mount_Door-1', 'KEYPAD')
+    // const { activeSelection } = useAppStore()
+    // const [ url, setURL ] = useState<string|null>(null)
+    useAttachment(mainScene, file, 'Keypad_Mount_Door-1', 'KEYPAD')
+    // const keypadId = activeSelection.entry
+    // useEffect(() => {
+    //     if(!keypadId) return
+    //     console.log("KEYPAD FOUND")
+    //     const load = async () => {
+    //         const asset = await getAsset(keypadId)
+    //         console.log("KEYPAD ASSET")
+    //         console.log(asset)
+    //         setURL(asset.url)
+    //     }
+    //     load()
+    // },[activeSelection]) 
+
     return null
 }
-const Handle = ({mainScene, filePath}: any) => {
-    console.log("Running Handle component.")
-    if(!filePath) {
-        console.log("No PATH")
-        return null
-    }
-    console.log('Path found')
-    useAttachment(mainScene, filePath , 'Drop_Handle_Mount-1', 'HANDLE')
+const Handle = ({mainScene,file}: any) => {
+    // const { activeSelection } = useAppStore()
+    // const handleId = activeSelection.handle
+    // if(!handleId) return null
+    // const asset = await getAsset(handleId)
+    useAttachment(mainScene, file, 'Drop_Handle_Mount-1', 'HANDLE')
     return null
 }
 
 export function ModelViewer({ url, color }: ModelViewerProps) {
-    // const { assets, activeBody } = useAppStore()
-    // const ids = new Map<string, Assets>
-    // for(const asset of assets){
-    //     const id = ids.get(asset.id)
-    //     if(id){
-    //         return
-    //     }else{
-    //     ids.set(asset.id,[asset])
-    //     }
-    // }
-    // console.log("ID MAPS:")
-    // console.log(ids)
-    // let storageKey: string 
-    // if(activeBody){
-    //     const asset = ids.get(activeBody)
-    //     if(!asset) console.log("ERROR GETTING ASSET FROM MAP")
-    //     else console.log("ASSET: ",asset)
-    //     storageKey = asset![0].storageKey.replace("products/","")
-    // }
-    // else return
+    const { activeSelection } = useAppStore()
+    const [ body, setBody ] = useState<THREE.Group|null>(null)
+    const [ entryURL, setEntryURL] = useState<string|null>(null)
+    const [ handleURL, setHandleURL] = useState<string|null>(null)
+    const {body: bodyId, entry: entryId, handle: handleId} = activeSelection
+    console.log("MODEL VIEWER RUNNING")
+    useEffect(() => {
+        async function load() {
+            if(!bodyId || ! entryId || !handleId) {
+                console.log("BODY ID NOT FOUND")
+                return
+            } 
+            try {
+                const asset = await getAsset(bodyId)
+                const entry = await getAsset(entryId)
+                const handle = await getAsset(handleId)
+                console.log("ASSET")
+                console.log(asset)
+                const {scene} = useGLTF(asset.url)
+                setBody(scene)
+                setEntryURL(entry.url)
+                setHandleURL(handle.url)
+                
+            } catch (error) {
+                console.log("ERROR IN GET ASSET CALL")
+                console.log(error)                
+            }
+        }
+        try {
+            load()            
+        } catch (error) {
+            console.log("ERROR IN LOAD FUNCTION")
+            console.log(error)
+        }
+    },[activeSelection])
+    // console.log(asset)
+    // const { scene } = useGLTF(asset.url);
+    // const bodyHinge = scene.getObjectByName("Body_Hinge_Pivot-1");
+    // const door = scene.getObjectByName("Small_Door_w_Mount");
 
-//   const { scene } = useGLTF(`assets/${storageKey}`);
-//   const bodyHinge = scene.getObjectByName("Body_Hinge_Pivot-1");
-//   const door = scene.getObjectByName("Small_Door_w_Mount");
-
-//   useEffect(() => {
-//     if (!bodyHinge || !door) return;
-//     const originalParent = door.parent;
-//     bodyHinge.attach(door);
-//     return () => {
-//         if (originalParent) {
-//             originalParent.attach(door);
-//         }
-//     };
-// },[bodyHinge, door])
+  useEffect(() => {
+    if (!body) return;
+    const bodyHinge = body.getObjectByName("Body_Hinge_Pivot-1");
+    const door = body.getObjectByName("Small_Door_w_Mount");
+    if(!bodyHinge || !door) return
+    const originalParent = door.parent;
+    bodyHinge.attach(door);
+    return () => {
+        if (originalParent) {
+            originalParent.attach(door);
+        }
+    };
+},[body])
 
 //   useFrame((_, delta) => {
 //     if (!bodyHinge) return;
@@ -101,9 +129,11 @@ export function ModelViewer({ url, color }: ModelViewerProps) {
   
   return (
     <>
-        {/* <primitive object={scene} />
-        <Keypad mainScene={scene} filePath={'/Touch_Keypad_v7.glb'}/>
-        <Handle mainScene={scene} filePath={'/Spoke_Hub_3_v1.glb'} /> */}
+        {body && <>
+            <primitive object={body} />
+            <Keypad mainScene={body} file={entryURL}/>
+            <Handle mainScene={body} file={handleURL} />
+        </> }
     </>
   )
   // const { scene } = useGLTF(url)

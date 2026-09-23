@@ -2,15 +2,20 @@ import { getToken } from "../api/authAdapter"
 import type { AssetMetadata } from "../api/types"
 import { useAppStore } from "../stores/app.store"
 
-export const assetCache = new Map<AssetMetadata["id"],Blob>()
+export type InMemoryAsset = {
+  blob: Blob,
+  url: string
+}
 
-export async function getAsset (assetId: AssetMetadata["id"]): Promise<Blob>{
+export const assetCache = new Map<AssetMetadata["id"], InMemoryAsset>()
+
+export async function getAsset (assetId: AssetMetadata["id"]): Promise<InMemoryAsset>{
   const token = getToken()
   if(!token) throw new Error("Missing access token")
   const assetMetadata = useAppStore.getState().assetMetadata
   if(!assetMetadata) throw new Error("Asset Metadata Missing")
-  const blob = assetCache.get(assetId)
-  if(!blob) {
+  const inMemoryAsset = assetCache.get(assetId)
+  if(!inMemoryAsset) {
     // fetch blob
     try {
       const storageKey = assetMetadata.get(assetId)?.storageKey.replace("products/","")
@@ -22,15 +27,18 @@ export async function getAsset (assetId: AssetMetadata["id"]): Promise<Blob>{
         Authorization: `Bearer ${token}`
       }
     })
-
       console.log("RESPONSE FROM BLOB FETCH")
       console.log(response)
-      const b = await response.blob()
-      assetCache.set(assetId, b)
-      return b
+      const blob = await response.blob()
+      const asset =  {
+        blob,
+        url: URL.createObjectURL(blob)
+      }
+      assetCache.set(assetId, asset)
+      return asset
     } catch (error) {
       throw new Error("Error fetching from bucket")
     }
   }
-  return blob
+  return inMemoryAsset
 }

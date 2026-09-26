@@ -5,43 +5,22 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1788051618020,
-      "tag": "0000_volatile_timeslip",
+      "when": 1790364924943,
+      "tag": "0000_calm_night_nurse",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1788052392142,
-      "tag": "0001_add_config_category_trigger",
+      "when": 1790365223426,
+      "tag": "0001_pink_pixie",
       "breakpoints": true
     },
     {
       "idx": 2,
       "version": "7",
-      "when": 1788058775487,
-      "tag": "0002_heavy_lionheart",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1788061369924,
-      "tag": "0003_sort_config_signature_trigger",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1787624314641,
-      "tag": "0003_vengeful_lightspeed",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1787626589919,
-      "tag": "0004_bitter_thundra",
+      "when": 1790366569390,
+      "tag": "0002_free_pete_wisdom",
       "breakpoints": true
     }
   ]

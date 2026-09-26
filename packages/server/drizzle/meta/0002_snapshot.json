@@ -1,6 +1,6 @@
 {
-  "id": "4765f86f-e910-4172-b756-8b0a6283be22",
-  "prevId": "44ab992c-71fa-4672-80a6-c9e819966627",
+  "id": "2ff0fdcd-7fea-4716-8b05-f26174e29c07",
+  "prevId": "98791d21-c5a0-4415-aed3-28710e038d42",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -48,6 +48,12 @@
         "category_id": {
           "name": "category_id",
           "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         }

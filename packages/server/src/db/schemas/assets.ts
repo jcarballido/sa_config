@@ -8,7 +8,8 @@ export const assets = table('assets', {
   mime: varchar('mime', { length: 64 }).notNull(),
   type: varchar('type', { length: 16 }).notNull(),
   size: integer('size').notNull(),
-  categoryId: uuid('category_id').references( () => categories.id)
+  categoryId: uuid('category_id').references( () => categories.id),
+  displayName: varchar('display_name')
 })
 
 export type Asset = typeof assets.$inferSelect

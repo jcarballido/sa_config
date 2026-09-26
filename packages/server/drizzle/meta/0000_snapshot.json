@@ -1,9 +1,43 @@
 {
-  "id": "28f7ebb3-76e9-4656-b1c5-1e6711866d56",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.categories": {
+      "name": "categories",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "categories_name_unique": {
+          "columns": [
+            "name"
+          ],
+          "nullsNotDistinct": false,
+          "name": "categories_name_unique"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
     "public.assets": {
       "name": "assets",
       "schema": "",
@@ -58,6 +92,7 @@
           "name": "assets_category_id_categories_id_fk",
           "tableFrom": "assets",
           "tableTo": "categories",
+          "schemaTo": "public",
           "columnsFrom": [
             "category_id"
           ],
@@ -71,26 +106,26 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "assets_hash_unique": {
-          "name": "assets_hash_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "hash"
-          ]
+          ],
+          "nullsNotDistinct": false,
+          "name": "assets_hash_unique"
         },
         "assets_storage_key_unique": {
-          "name": "assets_storage_key_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "storage_key"
-          ]
+          ],
+          "nullsNotDistinct": false,
+          "name": "assets_storage_key_unique"
         }
       },
-      "policies": {},
       "checkConstraints": {},
+      "policies": {},
       "isRLSEnabled": false
     },
-    "public.categories": {
-      "name": "categories",
+    "public.configurations": {
+      "name": "configurations",
       "schema": "",
       "columns": {
         "id": {
@@ -100,27 +135,40 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "name": {
-          "name": "name",
+        "model_number": {
+          "name": "model_number",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "signature": {
+          "name": "signature",
+          "type": "uuid[]",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "categories_name_unique": {
-          "name": "categories_name_unique",
-          "nullsNotDistinct": false,
+        "configurations_model_number_unique": {
           "columns": [
-            "name"
-          ]
+            "model_number"
+          ],
+          "nullsNotDistinct": false,
+          "name": "configurations_model_number_unique"
+        },
+        "configurations_signature_unique": {
+          "columns": [
+            "signature"
+          ],
+          "nullsNotDistinct": false,
+          "name": "configurations_signature_unique"
         }
       },
-      "policies": {},
       "checkConstraints": {},
+      "policies": {},
       "isRLSEnabled": false
     },
     "public.config_assets": {
@@ -153,6 +201,7 @@
           "name": "config_assets_config_id_configurations_id_fk",
           "tableFrom": "config_assets",
           "tableTo": "configurations",
+          "schemaTo": "public",
           "columnsFrom": [
             "config_id"
           ],
@@ -166,6 +215,7 @@
           "name": "config_assets_asset_id_assets_id_fk",
           "tableFrom": "config_assets",
           "tableTo": "assets",
+          "schemaTo": "public",
           "columnsFrom": [
             "asset_id"
           ],
@@ -178,48 +228,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.configurations": {
-      "name": "configurations",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "model_number": {
-          "name": "model_number",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "signature": {
-          "name": "signature",
-          "type": "uuid[]",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "configurations_model_number_unique": {
-          "name": "configurations_model_number_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "model_number"
-          ]
-        }
-      },
       "policies": {},
-      "checkConstraints": {},
       "isRLSEnabled": false
     }
   },
@@ -230,8 +240,21 @@
   "policies": {},
   "views": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {
+      "configurations": {
+        "columns": {
+          "signature": {
+            "isArray": true,
+            "dimensions": 1,
+            "rawType": "uuid"
+          }
+        }
+      }
+    }
   }
 }

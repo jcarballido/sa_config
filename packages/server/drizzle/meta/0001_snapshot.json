@@ -1,6 +1,6 @@
 {
-  "id": "44ab992c-71fa-4672-80a6-c9e819966627",
-  "prevId": "28f7ebb3-76e9-4656-b1c5-1e6711866d56",
+  "id": "98791d21-c5a0-4415-aed3-28710e038d42",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -50,6 +50,12 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": false
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -57,32 +63,39 @@
         "assets_category_id_categories_id_fk": {
           "name": "assets_category_id_categories_id_fk",
           "tableFrom": "assets",
+          "tableTo": "categories",
           "columnsFrom": [
             "category_id"
           ],
-          "tableTo": "categories",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "assets_hash_unique": {
           "name": "assets_hash_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "hash"
-          ],
-          "nullsNotDistinct": false
+          ]
         },
         "assets_storage_key_unique": {
           "name": "assets_storage_key_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "storage_key"
-          ],
-          "nullsNotDistinct": false
+          ]
+        },
+        "assets_display_name_unique": {
+          "name": "assets_display_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "display_name"
+          ]
         }
       },
       "policies": {},
@@ -113,10 +126,10 @@
       "uniqueConstraints": {
         "categories_name_unique": {
           "name": "categories_name_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "name"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       },
       "policies": {},
@@ -152,28 +165,28 @@
         "config_assets_config_id_configurations_id_fk": {
           "name": "config_assets_config_id_configurations_id_fk",
           "tableFrom": "config_assets",
+          "tableTo": "configurations",
           "columnsFrom": [
             "config_id"
           ],
-          "tableTo": "configurations",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "config_assets_asset_id_assets_id_fk": {
           "name": "config_assets_asset_id_assets_id_fk",
           "tableFrom": "config_assets",
+          "tableTo": "assets",
           "columnsFrom": [
             "asset_id"
           ],
-          "tableTo": "assets",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -212,10 +225,17 @@
       "uniqueConstraints": {
         "configurations_model_number_unique": {
           "name": "configurations_model_number_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "model_number"
-          ],
-          "nullsNotDistinct": false
+          ]
+        },
+        "configurations_signature_unique": {
+          "name": "configurations_signature_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "signature"
+          ]
         }
       },
       "policies": {},
@@ -225,10 +245,10 @@
   },
   "enums": {},
   "schemas": {},
-  "views": {},
   "sequences": {},
   "roles": {},
   "policies": {},
+  "views": {},
   "_meta": {
     "columns": {},
     "schemas": {},

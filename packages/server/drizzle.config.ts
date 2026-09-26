@@ -3,7 +3,7 @@ import "dotenv/config"
 import { defineConfig } from 'drizzle-kit'
 
 const connectionString = process.env.DATABASE_URL
-console.log("CONNECTION STRING: ", connectionString)
+// console.log("CONNECTION STRING: ", connectionString)
 if (!connectionString) {
   throw new Error('DATABASE_URL is not set. Copy .env.example to .env and fill it in.')
 }
@@ -18,6 +18,7 @@ export default defineConfig({
   dialect: 'postgresql',
   dbCredentials: {
     url: connectionString
-  },
-  schemaFilter:['public']
+  }
+  // schemaFilter:['public'],  
+  // verbose: true
 })

@@ -1,0 +1,1 @@
+ALTER TABLE "assets" DROP CONSTRAINT "assets_display_name_unique";

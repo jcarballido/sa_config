@@ -1,1 +1,0 @@
-ALTER TABLE "configurations" ADD CONSTRAINT "configurations_signature_unique" UNIQUE("signature");

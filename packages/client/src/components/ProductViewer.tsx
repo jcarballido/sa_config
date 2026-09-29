@@ -98,11 +98,11 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, color }: Produc
           <Canvas key={modelUrl} camera={{ position: [4.4, 3.1, 5.4], fov: 38 }} dpr={[1, 2]} shadows>
             <ambientLight intensity={0.8} />
             <directionalLight position={[4, 6, 4]} intensity={3} castShadow />
-            <directionalLight position={[-4, 2, -2]} intensity={1} color="#ff7a1a" />
+            <directionalLight position={[4, -1, 1]} intensity={2} color="#ff7a1a" />
             <Suspense fallback={null}>
               <ModelViewer url={modelUrl!} color={color} />
             </Suspense>
-            <OrbitControls enablePan={false} minDistance={0.01} maxDistance={3} minPolarAngle={0.65} maxPolarAngle={1.5} />
+            <OrbitControls enablePan={false} minDistance={1} maxDistance={3} minPolarAngle={0.65} maxPolarAngle={1.5} />
           </Canvas>
         </ErrorBoundary>
       </div>

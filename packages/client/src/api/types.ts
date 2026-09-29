@@ -31,7 +31,8 @@ export const AssetMetadataSchema = z.object({
   mime: z.string(),
   type:  z.string(),
   size: z.int(),
-  category: z.string()
+  category: z.string(),
+  displayName: z.string()
 })
 
 export const AssetMetadataArraySchema = z.array(AssetMetadataSchema)

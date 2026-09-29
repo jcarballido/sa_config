@@ -7,17 +7,14 @@ type State = {
   initialized: boolean,
   configurations: Map<Configuration["signature"][number],Configuration> | null,
   assetMetadata: Map<AssetMetadata['id'],AssetMetadata> | null,
-  activeSelection: {
-    body: AssetMetadata["id"] | null,
-    entry: AssetMetadata["id"] | null,
-    handle: AssetMetadata["id"]| null
-  },
+  activeSelection: Map<AssetMetadata['category'], AssetMetadata['id']|null>
   activeConfiguration: Configuration | null
 }
 
 type Action = {
   initialize: () => Promise<void>,
-  setActiveSelection: (assetId: string, category: string) => void
+  // setActiveSelection: (assetId: string, category: string) => void
+  setActiveSelection: (updates: {category:AssetMetadata['category'], id: AssetMetadata['id']}[]) => void
 }
 
 export const useAppStore = create<State & Action>((set) => ({
@@ -29,61 +26,46 @@ export const useAppStore = create<State & Action>((set) => ({
       const value = [...assetMetadata.values()].find((meta) => meta.category == category)
       if(value) return value
     }
-    console.log("ASSET METADATA")
-    console.log(assetMetadata)
     const body = getFirstValue("Body")?.id || null
     const entry = getFirstValue("Entry")?.id || null
     const handle = getFirstValue("Handle")?.id || null
     const arr = [entry,body, handle].filter(element => element != null).sort((a,b) => a.localeCompare(b))
-    console.log("INIT PARTS ARRAY")
-    console.log(arr)
-    console.log("CONFIGS:")
-    console.log(configs)
     const config = configs.get(arr.join("-")) || null
-    console.log("CONFIG FOUND:")
-    console.log(config)
     set({
       initialized: true,
       configurations: configs,
       assetMetadata,
-      activeSelection:{
-        body,
-        entry,
-        handle
-      },
-      activeConfiguration: config
+      // activeSelection: new Map([
+      //   ['body', body],
+      //   ['entry', entry],
+      //   ['handle', handle]
+      // ]),
+      // activeConfiguration: config
     })
   },
   configurations: null,
   assetMetadata: null,
-  activeSelection:{
-    body: null,
-    entry: null,
-    handle: null
-  },
+  activeSelection: new Map(),
   activeConfiguration: null,
   setActiveSelection: (assetId, category) => {
     if(category === "Body"){
-      set((state) => ({
-        activeSelection:{
-          ...state.activeSelection,
-          body: assetId
-        }
-      }))
+      set((state) => {
+        const update = new Map(state.activeSelection)
+        update.set('body', assetId)
+        return { activeSelection: update }
+      })
     } else if(category === "Handle"){
-      set((state) => ({
-        activeSelection:{
-          ...state.activeSelection,
-          handle: assetId
-        }
-      }))
+      set((state) => {
+        const update = new Map(state.activeSelection)
+        update.set('handle', assetId)
+        return { activeSelection: update }
+      })
     } else if(category === "Entry"){
-      set((state) => ({
-        activeSelection:{
-          ...state.activeSelection,
-          entry: assetId
-        }
-      }))
+      set((state) => {
+        const update = new Map(state.activeSelection)
+        update.set('entry', assetId)
+        return { activeSelection: update }
+      })
     }else {
       console.log("INVALID CATEGORY")
       return

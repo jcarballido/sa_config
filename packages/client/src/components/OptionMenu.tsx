@@ -4,7 +4,7 @@ import OptionRow from "../features/configMenu/OptionRow"
 import { useAppStore } from "../stores/app.store"
 
 export function OptionMenu(){
-  const { assetMetadata } = useAppStore()
+  const { assetMetadata, setActiveSelection } = useAppStore()
   const groups = new Map<string, AssetMetadataArray>()
   if(assetMetadata){
     for(const asset of assetMetadata.values()){
@@ -26,8 +26,20 @@ export function OptionMenu(){
   )
 
   useEffect(() => {
-    
-  })
+    console.log("SORTED GROUPS")
+    console.log(sortedGroups)
+    const body = sortedGroups.get('Body')
+    const entry = sortedGroups.get('Entry')
+    const handle = sortedGroups.get('Handle')
+    if(body && entry && handle){
+      const b = body[0]
+      const e = entry[0]
+      const h = handle[0]
+      if(b && e && h){
+        setActiveSelection([{category:b.category,id: b.id},{category:e.category,id:e.id},{category: h.category, id:h.id}])
+      }
+    }
+  },[assetMetadata])
 
   return(
     <div className="flex flex-col gap-7 py-6">

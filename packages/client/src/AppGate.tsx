@@ -13,15 +13,15 @@ const AppGate = () => {
   useEffect(() => {
     if(authStatus.status !== "loading"){
       const elapsed = performance.now()
-      console.log("ELAPSED TIME: ", elapsed)
+      // console.log("ELAPSED TIME: ", elapsed)
       if(elapsed - start.current < 3000){
-        console.log("TIME LESS THAN THRESHOLD")
+        // console.log("TIME LESS THAN THRESHOLD")
         setTimeout(()=>{
           setIsLeaving(true)
           setTimeout(()=>setShowSplash(false),500)
         }, (3000-(elapsed-start.current)))
       }else{
-        console.log("TIME EXCEEDS THRESHOLD")
+        // console.log("TIME EXCEEDS THRESHOLD")
         setIsLeaving(true)
         setTimeout(()=>setShowSplash(false),500)
       }

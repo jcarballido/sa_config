@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import type { AssetMetadata } from "../../api/types"
-import { getAsset } from "../../assets/assetCache"
 import { useAppStore } from "../../stores/app.store"
 
 export default function OptionRow({
@@ -16,8 +15,7 @@ export default function OptionRow({
   const [ selected, setSelected ] = useState<boolean>(false)
   const onClick: React.MouseEventHandler = async (e: React.MouseEvent) => {
     e.preventDefault()
-    setActiveSelection(id, category)
-    const r = await getAsset(id)
+    setActiveSelection([{category, id}])
   }
 
   useEffect(() => {
@@ -26,11 +24,12 @@ export default function OptionRow({
     else setSelected(false)
     return
   },[activeSelection])
+
   
   return (
     <button
       onClick={onClick}
-      className={`flex w-full items-center justify-between rounded-lg border  px-4 py-3 text-sm font-medium transition    ${selected? 'border-amber-200': 'border-blue-400' }`}
+      className={`flex w-full items-center justify-between rounded-lg border  px-4 py-3 text-sm font-medium transition ${selected? 'border-amber-200': 'border-blue-400' }`}
         // ${
         //   selected
         //     ? 'border-purple-500 bg-zinc-800 text-zinc-100'

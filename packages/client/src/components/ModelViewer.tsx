@@ -1,10 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { useAppStore } from '../stores/app.store'
-import type { Assets } from '../api/types'
-import { getAsset, type InMemoryAsset } from '../assets/assetCache'
-import type { GLTF } from 'three/examples/jsm/Addons.js'
+import { getAsset  } from '../assets/assetCache'
 
 type ModelViewerProps = {
   url: string
@@ -16,7 +14,6 @@ function hasColor(mat: THREE.Material): mat is THREE.Material & { color: THREE.C
 }
 
 const useAttachment = (scene, filePath: string, attachmentPointName, accessory) => {
-    console.log('Running hook')
 
     const {scene: attachment} = useGLTF(filePath)
 
@@ -69,41 +66,52 @@ export function ModelViewer({ url, color }: ModelViewerProps) {
     const [ body, setBody ] = useState<THREE.Group|null>(null)
     const [ entryURL, setEntryURL] = useState<string|null>(null)
     const [ handleURL, setHandleURL] = useState<string|null>(null)
-    const {body: bodyId, entry: entryId, handle: handleId} = activeSelection
-    console.log("MODEL VIEWER RUNNING")
+    // const {body: bodyId, entry: entryId, handle: handleId} = activeSelection
+    const bodyId = activeSelection.get('Body')
+    const entryId = activeSelection.get('Entry') 
+    const handleId = activeSelection.get('Handle')
     useEffect(() => {
+        console.log("EFFECT RUNNING")
+        if(!bodyId || ! entryId || !handleId) {
+            console.log("ID MISSING")
+            return
+        }
+
         async function load() {
-            if(!bodyId || ! entryId || !handleId) {
-                console.log("BODY ID NOT FOUND")
-                return
-            } 
             try {
-                const asset = await getAsset(bodyId)
-                const entry = await getAsset(entryId)
-                const handle = await getAsset(handleId)
-                console.log("ASSET")
-                console.log(asset)
-                const {scene} = useGLTF(asset.url)
-                setBody(scene)
-                setEntryURL(entry.url)
-                setHandleURL(handle.url)
-                
+                if(!bodyId || ! entryId || !handleId) {
+                    throw new Error(`ASSET ID NOT FOUND"
+                     Body ID: ${bodyId})
+                    Entry ID: ${entryId}
+                    Handle ID: ${handleId}`)
+                } 
+                    const asset = await getAsset(bodyId)
+                    console.log("ASSET: ", asset)
+                    const entry = await getAsset(entryId)
+                    console.log("ENTRY: ", entry)
+                    const handle = await getAsset(handleId)
+                    console.log("HANDLE: ", handle)
+                    try {
+                        
+                        const {scene} = useGLTF(asset.url)
+                        setBody(scene)
+                        setEntryURL(entry.url)
+                        setHandleURL(handle.url)                
+                    } catch (error) {
+                        console.log("USE GLTF error")
+                        throw error
+                    }
+
+                    
             } catch (error) {
-                console.log("ERROR IN GET ASSET CALL")
-                console.log(error)                
+                console.log("ERROR CAUGHT IN LOAD")
+                console.log(error)
             }
         }
-        try {
-            load()            
-        } catch (error) {
-            console.log("ERROR IN LOAD FUNCTION")
-            console.log(error)
-        }
+
+        load()            
+
     },[activeSelection])
-    // console.log(asset)
-    // const { scene } = useGLTF(asset.url);
-    // const bodyHinge = scene.getObjectByName("Body_Hinge_Pivot-1");
-    // const door = scene.getObjectByName("Small_Door_w_Mount");
 
   useEffect(() => {
     if (!body) return;

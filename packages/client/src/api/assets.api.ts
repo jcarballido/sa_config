@@ -8,6 +8,8 @@ export async function getAssestMetadata(): Promise<AssetMetadataMap>{
   const token = useAuthStore.getState().authStatus.session?.access_token
   if(!token) throw new Error("Unauthorized.")
   const response = await http.getPrivate<AssetMetadata[]>('api/assets/assets',token)
+  console.log("GET METADATA RESONSE:")
+  console.log(response)
   const result = AssetMetadataArraySchema.safeParse(response)
   if(!result.success) throw new Error("Response violated contract for request: getAssets.")
   const map: AssetMetadataMap = new Map()

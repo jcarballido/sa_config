@@ -13,8 +13,9 @@ export default function App() {
   const [productId, setProductId] = useState(PRODUCTS[0].id)
   const [variantIndex, setVariantIndex] = useState(0)
   const [kind, setKind] = useState<'model' | 'image'>('model')
-  const [color, setColor] = useState<string | null>(null)
+  // const [color, setColor] = useState<string | null>(null)
   const [pinged, setPinged] = useState<boolean>(false)
+  const [color, setColor] = useState<{color:{entry:string,handle:string}}>({color:{handle:"#FFFFFF",entry:"#FFFFFF"}})
 
   const product = PRODUCTS.find((p) => p.id === productId) ?? PRODUCTS[0]
   const variant = product.variants[Math.min(variantIndex, product.variants.length - 1)]
@@ -22,46 +23,37 @@ export default function App() {
   function handleProductChange(id: string) {
     setProductId(id)
     setVariantIndex(0)
-    setColor(null)
+    // setColor(null)
   }
 
   function handleVariantChange(index: number) {
     setVariantIndex(index)
-    setColor(null)
+    // setColor(null)
   }
 
-  const activeUrl = kind === 'model' ? variant.modelUrl : variant.imageUrl
   const summary = `${product.name} / ${variant.label} / ${kind === 'model' ? '3D Model' : 'Render'}`
 
   useEffect(() => {
     if (authStatus.status === 'authenticated' && !pinged) {
       setPinged(true)
-      // TODO: Wire up stored conversation metadata fetch
     }
   }, [authStatus.status])
-
-  // useEffect(() =>{
-  //   const t = async() => {
-  //     console.log("GET CONFIGURATIONS...")
-  //     console.log(await getConfigurations())
-  //   }
-  //   if(authStatus.status === 'authenticated'){
-  //     t()
-  //   }
-  // })
 
   useEffect(() => {
     if(!initialized && authStatus.user){
       initialize()
     }
   },[authStatus.user])
+
+  useEffect(() => {
+    console.log("COLOR CHECK")
+    console.log(color)
+  },[color])
   
 
   if (authStatus.status === 'unauthenticated') {
     return <Login />
   }
-
-
 
   return (
     <main className="h-screen flex flex-col w-screen overflow-hidden bg-zinc-950 text-zinc-100 absolute">
@@ -119,7 +111,8 @@ export default function App() {
             modelUrl={variant.modelUrl}
             imageUrl={variant.imageUrl}
             kind={'model'}
-            color={color}
+            // color={color}
+            options={color}
           />
 
           {/* Current configuration bar */}
@@ -133,16 +126,7 @@ export default function App() {
         </section>
 
         {/* Right sidebar */}
-        <ProductControls
-          // products={PRODUCTS}
-          // productId={product.id}
-          // onProductChange={handleProductChange}
-          // variantIndex={variantIndex}
-          // onVariantChange={handleVariantChange}
-          // kind={kind}
-          // onKindChange={setKind}
-          // downloadUrl={activeUrl}
-        />
+        <ProductControls setColor={setColor}/>
       </div>
     </main>
   )

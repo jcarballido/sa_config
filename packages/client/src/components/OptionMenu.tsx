@@ -1,9 +1,9 @@
-import { useEffect } from "react"
+import { useEffect, type Dispatch, type SetStateAction } from "react"
 import type { AssetMetadataArray } from "../api/types"
 import OptionRow from "../features/configMenu/OptionRow"
 import { useAppStore } from "../stores/app.store"
 
-export function OptionMenu(){
+export function OptionMenu({setColor}:{setColor: Dispatch<SetStateAction<{color:{entry:string,handle:string}}>>}){
   const { assetMetadata, setActiveSelection } = useAppStore()
   const groups = new Map<string, AssetMetadataArray>()
   if(assetMetadata){
@@ -41,12 +41,37 @@ export function OptionMenu(){
     }
   },[assetMetadata])
 
+  const colors = ['bg-[#FF6D00]','bg-[#00E5FF]','bg-[#39FF14]','bg-[#FF1493]']
+
+  const changeColor = (cat: string, color:string) => {
+    const c = color.replace("bg-","").replace("[","").replace("]","")
+    console.log("CATEGORY: ",cat)
+    if(cat.trim() === "Entry"){
+      setColor(prev=>({
+        ...prev,
+        color:{
+          handle:prev.color.handle,
+          entry:c
+        }
+      }))
+    }else if( cat === "Handle"){
+      setColor(prev=>({
+        ...prev,
+        color:{
+          entry:prev.color.entry,
+          handle:c
+        }
+      }))
+    }
+  }
+
+
   return(
     <div className="flex flex-col gap-7 py-6">
       {
         Array.from(sortedGroups,([category, assets]) =>{
           return (
-            <div key={category}>
+            <div key={category} className="">
               <div className="mb-3 flex items-center justify-between">
                 <label className="text-sm font-semibold capitalize text-zinc-100">{category}</label>
               </div>
@@ -58,6 +83,15 @@ export function OptionMenu(){
                     )
                   })
                 }
+              <div className="border-4 border-purple-600 text-3xl flex justify-left gap-4">
+                {
+                  colors.map(color => {
+                    return(
+                      <div className={`w-10 h-10 border-white border-2 ${color}`} onClick={()=>changeColor(category,color)}/>
+                    )
+                  })
+                }
+              </div>
               </div>
             </div>
         )})

@@ -3,19 +3,18 @@ import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { useAppStore } from '../stores/app.store'
 import { getAsset, type InMemoryAsset } from '../assets/assetCache'
-import { useFrame } from '@react-three/fiber'
 
 type ModelViewerProps = {
-  url: string
-  color?: string | null
+  rotate: boolean,
+  options?:{
+    color?:{
+      keypad?:string,
+      handle?:string
+    }
+  }
 }
 
-function hasColor(mat: THREE.Material): mat is THREE.Material & { color: THREE.Color } {
-  return 'color' in mat
-}
-
-const useAttachment = (scene, filePath: string, attachmentPointName, accessory, color?, rotate?) => {
-
+const useAttachment = (scene: THREE.Group, filePath: string, attachmentPointName: string, accessory: string, options?: {color?: string}) => {
   const { scene: attachment } = useGLTF(filePath)
 
   useEffect(() => {
@@ -26,7 +25,10 @@ const useAttachment = (scene, filePath: string, attachmentPointName, accessory, 
       return
     }
     const instance = attachment.clone()
-    if(color) {
+    const color = options?.color
+    console.log("COLOR IN USEATTACHMENT: ",color)
+
+    if(color !== undefined) {
       instance.traverse((object) => {
       if (object instanceof THREE.Mesh) {
       const material = object.material as THREE.MeshStandardMaterial;
@@ -34,24 +36,40 @@ const useAttachment = (scene, filePath: string, attachmentPointName, accessory, 
       }
       })
     };    
-
     mount.add(instance)
 
-    return () => mount.remove(instance)
-  }, [scene, filePath])
+    return () => {mount.remove(instance)}
+  }, [scene, filePath,options?.color])
+  
 }
 
-const Keypad = ({ mainScene, file }: any) => {
+const Keypad = ({ mainScene, file, color }: {mainScene: THREE.Group, file:string, color?:string}) => {
   console.log("Running Keypad component.")
-  useAttachment(mainScene, file, 'Keypad_Mount_Door-1', 'KEYPAD')
+  useAttachment(mainScene, file, 'Keypad_Mount_Door-1', 'KEYPAD',{color})
   return null
 }
-const Handle = ({ mainScene, file }: any) => {
-  useAttachment(mainScene, file, 'Drop_Handle_Mount-1', 'HANDLE','#FF1493', true)
+const Handle = ({ mainScene, file, color }: {mainScene: THREE.Group, file:string, color?:string}) => {
+  useAttachment(mainScene, file, 'Drop_Handle_Mount-1', 'HANDLE',{color})
   return null
 }
 
-const Safe = ({body, entry, handle, rotate}:{body:string|null,entry:string|null,handle:string|null, rotate:boolean}) => {
+const Safe = ({
+  body,
+  entry,
+  handle,
+  rotate,
+  options}:{
+  body:string|null,
+  entry:string|null,
+  handle:string|null,
+  rotate:boolean,
+  options?: {
+    color?:{
+      entry?:string,
+      handle?:string
+    }
+  }
+}) => {
   if(!body) return null
   const {scene} = useGLTF(body)
   const [hinge, setHinge] = useState<THREE.Object3D|null>(null)
@@ -68,40 +86,32 @@ const Safe = ({body, entry, handle, rotate}:{body:string|null,entry:string|null,
         originalParent.attach(door);
       }
     };
-  }, [body])
+  }, [body,options])
 
-    if(rotate && hinge) {
-      hinge.rotation.y = THREE.MathUtils.degToRad(45);
-    }
+  
 
+  if(rotate && hinge) {
+    hinge.rotation.y = THREE.MathUtils.degToRad(45);
+  }
  
-  // useFrame((_, delta) => {
-  //   if (!hinge) return;
-
-  //     // Rotate continuously around the pivot's local Y axis
-  //   hinge.rotation.y -= delta;
-  // });
-
-
   return(
     <>
-     {body && entry && handle && 
-      <>
-        <primitive object={scene} />
-        <Keypad mainScene={scene} file={entry} />
-        <Handle mainScene={scene} file={handle} />        
-      </>
-     }
-    </>)
-
+      {body && entry && handle && 
+        <>
+          <primitive object={scene} />
+          <Keypad mainScene={scene} file={entry} color={options?.color?.entry} />
+          <Handle mainScene={scene} file={handle} color={options?.color?.handle} />        
+        </>
+      }
+    </>
+  )
 }
 
-export function ModelViewer({ url, color }: ModelViewerProps) {
+export function ModelViewer({ rotate,options }: ModelViewerProps) {
   const { activeSelection } = useAppStore()
   const [bodyURL, setBodyURL] = useState<InMemoryAsset['url'] | null>(null)
   const [entryURL, setEntryURL] = useState<InMemoryAsset['url'] | null>(null)
   const [handleURL, setHandleURL] = useState<InMemoryAsset['url'] | null>(null)
-  // const {body: bodyId, entry: entryId, handle: handleId} = activeSelection
   const bodyId = activeSelection.get('Body')
   const entryId = activeSelection.get('Entry')
   const handleId = activeSelection.get('Handle')
@@ -120,6 +130,9 @@ export function ModelViewer({ url, color }: ModelViewerProps) {
             Entry ID: ${entryId}
             Handle ID: ${handleId}`)
         }
+            console.log("COLOR OPTIONS: ")
+            console.log(options)
+
         const body = await getAsset(bodyId)
         const entry = await getAsset(entryId)
         const handle = await getAsset(handleId)
@@ -138,7 +151,7 @@ export function ModelViewer({ url, color }: ModelViewerProps) {
 
   return (
     <>
-      <Safe body={bodyURL} handle={handleURL} entry={entryURL} rotate={true}/>
+      <Safe body={bodyURL} handle={handleURL} entry={entryURL} rotate={rotate} options={options}/>
     </>
   )
 }

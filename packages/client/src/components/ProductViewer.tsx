@@ -3,14 +3,20 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { ModelViewer } from './ModelViewer'
 import { ErrorBoundary } from './ErrorBoundary'
-import { useAppStore } from '../stores/app.store'
+// import { useAppStore } from '../stores/app.store'
 
 type ProductViewerProps = {
   label: string
   modelUrl: string | null
   imageUrl: string | null
   kind: 'model' | 'image'
-  color: string | null
+  // color: string | null,
+  options?:{
+    color:{
+      keypad?:string,
+      handle?:string
+    }
+  }
 }
 
 function PreviewError({ message }: { message: string }) {
@@ -21,8 +27,8 @@ function PreviewError({ message }: { message: string }) {
   )
 }
 
-export function ProductViewer({ label, modelUrl, imageUrl, kind, color }: ProductViewerProps) {
-  const { configurations } = useAppStore()
+export function ProductViewer({ label, modelUrl, imageUrl, kind, options }: ProductViewerProps) {
+  // const { configurations } = useAppStore()
   const [imageError, setImageError] = useState(false)
   // const activeUrl = kind === 'model' ? modelUrl : imageUrl
   const activeUrl = "model"
@@ -100,7 +106,7 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, color }: Produc
             <directionalLight position={[4, 6, 4]} intensity={3} castShadow />
             <directionalLight position={[4, -1, 1]} intensity={2} color="#ff7a1a" />
             <Suspense fallback={null}>
-              <ModelViewer url={modelUrl!} color={color} />
+              <ModelViewer rotate={false} options={options} />
             </Suspense>
             <OrbitControls enablePan={false} minDistance={1} maxDistance={3} minPolarAngle={0.65} maxPolarAngle={1.5} />
           </Canvas>
@@ -119,15 +125,15 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, color }: Produc
           <img
             src={imageUrl!}
             alt={label}
-            className="h-full min-h-[488px] w-full rounded-[20px] object-cover"
+            className="h-full min-h-122 w-full rounded-[20px] object-cover"
             onError={() => setImageError(true)}
           />
-          {color && (
+          {/* {color && (
             <div
               className="pointer-events-none absolute inset-0 mix-blend-multiply rounded-[20px]"
               style={{ backgroundColor: color }}
             />
-          )}
+          )} */}
         </div>
       )}
     </div>

@@ -1,12 +1,13 @@
 import { SidebarHeader } from './SidebarHeader'
 import { OptionMenu } from './OptionMenu'
+import type { Dispatch, SetStateAction } from 'react'
 
-export function ProductControls() {
+export function ProductControls({setColor}:{setColor: Dispatch<SetStateAction<{color:{entry:string,handle:string}}>>}) {
 
   return (
     <aside className="w-full rounded-3xl border border-zinc-800 bg-zinc-900 p-5 lg:max-w-97.5 lg:p-6">
       <SidebarHeader />
-      <OptionMenu />
+      <OptionMenu setColor={setColor}/>
       <div className="border-t border-zinc-800 pt-5">
         <div className="mb-4 flex items-center justify-between">
           <span className="text-xs text-zinc-500">Configuration index</span>

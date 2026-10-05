@@ -6,3 +6,5 @@ packages/server/storage/
 packages/client/mock.tsx
 packages/client/public/*.glb
 packages/server/src/db/seed.ts
+packages/processor/input
+packages/processor/output

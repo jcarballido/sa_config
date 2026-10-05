@@ -3,6 +3,7 @@ import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { useAppStore } from '../stores/app.store'
 import { getAsset, type InMemoryAsset } from '../assets/assetCache'
+import { useFrame } from '@react-three/fiber'
 
 type ModelViewerProps = {
   rotate: boolean,
@@ -73,6 +74,8 @@ const Safe = ({
   if(!body) return null
   const {scene} = useGLTF(body)
   const [hinge, setHinge] = useState<THREE.Object3D|null>(null)
+
+
   useEffect(() => {
     if (!scene) return;
     const bodyHinge = scene.getObjectByName("Body_Hinge_Pivot-1")||null;
@@ -81,6 +84,11 @@ const Safe = ({
     if (!bodyHinge || !door) return
     const originalParent = door.parent;
     bodyHinge.attach(door);
+    // if(rotate && hinge) {
+
+    //   if(rotate) hinge.rotation.y = THREE.MathUtils.degToRad(120);
+    // }
+    // if(!rotate && hinge) hinge.rotation.y = THREE.MathUtils.degToRad(0);
     return () => {
       if (originalParent) {
         originalParent.attach(door);
@@ -88,11 +96,19 @@ const Safe = ({
     };
   }, [body,options])
 
-  
-
-  if(rotate && hinge) {
-    hinge.rotation.y = THREE.MathUtils.degToRad(45);
-  }
+  useFrame((_,delta) => {
+    if(!hinge) {
+      console.log("HINGE IS NOT PRESENT")
+      return
+    }
+    const deg = rotate ? THREE.MathUtils.degToRad(120) : 0
+    hinge.rotation.y = THREE.MathUtils.damp(
+      hinge.rotation.y,
+      deg,
+      3,
+      delta
+    )
+  })
  
   return(
     <>

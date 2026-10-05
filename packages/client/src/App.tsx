@@ -16,6 +16,7 @@ export default function App() {
   // const [color, setColor] = useState<string | null>(null)
   const [pinged, setPinged] = useState<boolean>(false)
   const [color, setColor] = useState<{color:{entry:string,handle:string}}>({color:{handle:"#FFFFFF",entry:"#FFFFFF"}})
+  const [ rotate, setRotate ] =useState<boolean>(false)
 
   const product = PRODUCTS.find((p) => p.id === productId) ?? PRODUCTS[0]
   const variant = product.variants[Math.min(variantIndex, product.variants.length - 1)]
@@ -56,9 +57,9 @@ export default function App() {
   }
 
   return (
-    <main className="h-screen flex flex-col w-screen overflow-hidden bg-zinc-950 text-zinc-100 absolute">
+    <main className="flex flex-col w-full h-full overflow-hidden bg-zinc-950 text-zinc-100 absolute">
       {/* Header */}
-      <header className="grow-0 flex items-center justify-between border-b border-zinc-800 px-4 py-2 lg:px-6">
+      <header className="shrink-0 flex items-center justify-between border-b border-zinc-800 px-4 py-2 lg:px-6">
         <div className="flex items-center gap-3">
           {/* Placeholder for brand icon */}
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800">
@@ -74,9 +75,9 @@ export default function App() {
       </header>
 
       {/* Main content */}
-      <div className="flex grow w-full flex-col gap-6 p-3 lg:flex-row lg:p-6">
+      <div className="flex flex-1 min-h-0 overflow-hidden  w-full flex-col gap-6 p-3 lg:flex-row lg:p-6 h-full">
         {/* Left section */}
-        <section className="flex min-w-0 flex-1 flex-col gap-4">
+        <section className="flex min-w-0 min-h-0 flex-1 flex-col gap-4">
           {/* Title row with mode switch */}
           <div className="flex items-end justify-between">
             <div>
@@ -113,20 +114,21 @@ export default function App() {
             kind={'model'}
             // color={color}
             options={color}
+            rotate={rotate}
           />
 
           {/* Current configuration bar */}
-          <div className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900 px-5 py-4">
+          {/* <div className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900 px-5 py-4 h-full">
             <div>
               <p className="font-mono text-[10px] tracking-[0.22em] text-zinc-500">Current configuration</p>
               <p className="mt-1 text-sm font-medium text-zinc-100">{summary}</p>
-            </div>
+            </div> */}
             {/* <p className="text-xs text-zinc-500">Preloaded render updates with your selections</p> */}
-          </div>
+          {/* </div> */}
         </section>
 
         {/* Right sidebar */}
-        <ProductControls setColor={setColor}/>
+        <ProductControls setColor={setColor} setRotate={setRotate} rotate={rotate}/>
       </div>
     </main>
   )

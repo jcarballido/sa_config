@@ -3,7 +3,7 @@ import type { AssetMetadataArray } from "../api/types"
 import OptionRow from "../features/configMenu/OptionRow"
 import { useAppStore } from "../stores/app.store"
 
-export function OptionMenu({setColor}:{setColor: Dispatch<SetStateAction<{color:{entry:string,handle:string}}>>}){
+export function OptionMenu({setColor, setRotate, rotate}:{setColor: Dispatch<SetStateAction<{color:{entry:string,handle:string}}>>, setRotate: Dispatch<SetStateAction<boolean>>, rotate: boolean}){
   const { assetMetadata, setActiveSelection } = useAppStore()
   const groups = new Map<string, AssetMetadataArray>()
   if(assetMetadata){
@@ -65,9 +65,13 @@ export function OptionMenu({setColor}:{setColor: Dispatch<SetStateAction<{color:
     }
   }
 
+  const toggleRotate = () => {
+    setRotate(!rotate)
+  }
 
   return(
-    <div className="flex flex-col gap-7 py-6">
+    <div className="flex flex-col gap-7 py-6 flex-1 min-h-0 overflow-y-auto overscroll-contain ">
+      {/* <div onClick={toggleRotate} className="border-2 border-white p-4 text-2xl">ROTATE</div> */}
       {
         Array.from(sortedGroups,([category, assets]) =>{
           return (

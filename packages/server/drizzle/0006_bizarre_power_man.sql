@@ -1,0 +1,2 @@
+ALTER TABLE "processed_images" ADD COLUMN "config_id" uuid;--> statement-breakpoint
+ALTER TABLE "processed_images" ADD CONSTRAINT "processed_images_config_id_configurations_id_fk" FOREIGN KEY ("config_id") REFERENCES "public"."configurations"("id") ON DELETE no action ON UPDATE no action;

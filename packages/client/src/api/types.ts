@@ -37,7 +37,23 @@ export const AssetMetadataSchema = z.object({
 
 export const AssetMetadataArraySchema = z.array(AssetMetadataSchema)
 
+export const ImageAssetMetadataSchema = z.object({
+  id: z.uuid(),
+  hash: z.string(),
+  storageKey: z.string(),
+  mime: z.string(),
+  format: z.literal('heif'),
+  size: z.int(),
+  height: z.int(),
+  width: z.int(),
+  hasAlpha: z.boolean(),
+  configurationId: z.uuid() 
+})
+
+export const ImageAssetMetadataArraySchema = z.array(ImageAssetMetadataSchema)
+
 export type Configuration = z.infer<typeof ConfigurationsSchema>
 export type ConfigurationsArray = z.infer<typeof ConfigurationsArraySchema>
 export type AssetMetadata = z.infer<typeof AssetMetadataSchema>
 export type AssetMetadataArray = z.infer<typeof AssetMetadataArraySchema>
+export type ImageAssetMetadata = z.infer<typeof ImageAssetMetadataSchema>

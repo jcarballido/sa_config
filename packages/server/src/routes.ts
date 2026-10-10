@@ -10,6 +10,7 @@ import { db } from './db/db.js'
 import { configurations } from './db/schemas/configurations.js'
 import { assets } from './db/schemas/assets.js'
 import { categories } from './db/schemas/categories.js'
+import { processedImages } from './db/schemas/processed_image_assets.js'
 
 export async function registerRoutes(app: FastifyInstance) {
   app.get("/test",async(request,reply) => {
@@ -166,6 +167,24 @@ export async function registerRoutes(app: FastifyInstance) {
     console.log(result)
     return result
   })
+
+  app.get("/assets/processedImages", async(request,reply) => {
+    console.log("GET images requested.")
+    const result = await db
+      .select({
+        ...getTableColumns(processedImages),
+        ...getTableColumns(configurations)
+      })
+      .from(processedImages)
+      .innerJoin(
+        configurations,
+        eq(processedImages.configurationId,configurations.id)
+      ) 
+    console.log("RESULT:")
+    console.log(result)
+    return result
+  })
+
 
   return app
 }

@@ -16,5 +16,8 @@
       "esbuild"
     ]
   },
-  "packageManager": "pnpm@10.25.0"
+  "packageManager": "pnpm@10.25.0",
+  "dependencies": {
+    "csv-writer": "^1.6.0"
+  }
 }

@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { ModelViewer } from './ModelViewer'
 import { ErrorBoundary } from './ErrorBoundary'
+import { useAppStore } from '../stores/app.store'
 // import { useAppStore } from '../stores/app.store'
 
 type ProductViewerProps = {
@@ -11,7 +12,6 @@ type ProductViewerProps = {
   imageUrl: string | null
   kind: 'model' | 'image'
   // color: string | null,
-  rotate: boolean
   options?:{
     color:{
       keypad?:string,
@@ -28,10 +28,11 @@ function PreviewError({ message }: { message: string }) {
   )
 }
 
-export function ProductViewer({ label, modelUrl, imageUrl, kind, options,rotate }: ProductViewerProps) {
+export function ProductViewer({ label, modelUrl, imageUrl, kind, options}: ProductViewerProps) {
   // const { configurations } = useAppStore()
   const [imageError, setImageError] = useState(false)
   const [ open, setOpen ] = useState<boolean>(false)
+  const { configurations, activeConfiguration, imageAssetMetadata, activeImageIds, setActiveImageIds  } = useAppStore()
   // const activeUrl = kind === 'model' ? modelUrl : imageUrl
   const activeUrl = "model"
   // console.log("CONFIGURATIONS:")
@@ -39,6 +40,25 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, options,rotate 
   useEffect(() => {
     setImageError(false)
   }, [imageUrl])
+
+  useEffect(() => {
+    // console.log("Active Config: ")
+    // console.log(activeConfiguration)
+    // const imageIds = []
+    // if(configurations){
+    //   for(const config of configurations.values()){
+    //     if(config.modelNumber == )
+    //   }
+    // }
+    if(activeConfiguration?.id){
+      const hashes = imageAssetMetadata?.get(activeConfiguration?.id)?.map(imgData => imgData.hash) || []
+      setActiveImageIds(hashes)
+    }
+  },[activeConfiguration])
+  useEffect(() => {
+    console.log("ACTIVE IMAGES:")
+    console.log(activeImageIds)
+  },[activeImageIds])
 
   if (!activeUrl) {
     console.log("NO ACTIVE URL")
@@ -135,13 +155,23 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, options,rotate 
       {imageError ? (
         <PreviewError message="Failed to load image" />
       ) : (
-        <div className="relative">
-          <img
+        <div className="relative border border-violet-600 h-full">
+          {
+            activeImageIds?.map(imageId => {
+              return(
+                <div>
+                  
+                  Here is {imageId}
+                </div>
+              )
+            })
+          }
+          {/* <img
             src={imageUrl!}
             alt={label}
             className="h-full min-h-full w-full rounded-[20px] object-contain"
             onError={() => setImageError(true)}
-          />
+          /> */}
           {/* {color && (
             <div
               className="pointer-events-none absolute inset-0 mix-blend-multiply rounded-[20px]"

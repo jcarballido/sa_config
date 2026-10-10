@@ -9,7 +9,7 @@ import { useAppStore } from './stores/app.store'
 
 export default function App() {
   const { authStatus } = useAuthStore()
-  const { initialize, initialized } = useAppStore()
+  const { initialize, initialized, imageAssetMetadata } = useAppStore()
   const [productId, setProductId] = useState(PRODUCTS[0].id)
   const [variantIndex, setVariantIndex] = useState(0)
   const [kind, setKind] = useState<'model' | 'image'>('model')
@@ -47,9 +47,9 @@ export default function App() {
   },[authStatus.user])
 
   useEffect(() => {
-    console.log("COLOR CHECK")
-    console.log(color)
-  },[color])
+    console.log("ImageAssetMetadata")
+    console.log(imageAssetMetadata)
+  })
   
 
   if (authStatus.status === 'unauthenticated') {
@@ -111,7 +111,7 @@ export default function App() {
             label={`${product.name} · ${variant.label}`}
             modelUrl={variant.modelUrl}
             imageUrl={variant.imageUrl}
-            kind={'model'}
+            kind={kind}
             // color={color}
             options={color}
             rotate={rotate}

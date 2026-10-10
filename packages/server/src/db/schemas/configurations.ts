@@ -10,4 +10,4 @@ export const configurations = table('configurations', {
   signature: uuid('signature').array().unique()
 })
 
-export const Configuration = configurations.$inferSelect
+export type Configuration = typeof configurations.$inferSelect

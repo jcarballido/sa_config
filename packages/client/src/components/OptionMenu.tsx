@@ -4,7 +4,7 @@ import OptionRow from "../features/configMenu/OptionRow"
 import { useAppStore } from "../stores/app.store"
 
 export function OptionMenu({setColor, setRotate, rotate}:{setColor: Dispatch<SetStateAction<{color:{entry:string,handle:string}}>>, setRotate: Dispatch<SetStateAction<boolean>>, rotate: boolean}){
-  const { assetMetadata, setActiveSelection } = useAppStore()
+  const { assetMetadata, activeSelection, setActiveSelection } = useAppStore()
   const groups = new Map<string, AssetMetadataArray>()
   if(assetMetadata){
     for(const asset of assetMetadata.values()){
@@ -26,17 +26,19 @@ export function OptionMenu({setColor, setRotate, rotate}:{setColor: Dispatch<Set
   )
 
   useEffect(() => {
-    console.log("SORTED GROUPS")
-    console.log(sortedGroups)
-    const body = sortedGroups.get('Body')
-    const entry = sortedGroups.get('Entry')
-    const handle = sortedGroups.get('Handle')
-    if(body && entry && handle){
-      const b = body[0]
-      const e = entry[0]
-      const h = handle[0]
-      if(b && e && h){
-        setActiveSelection([{category:b.category,id: b.id},{category:e.category,id:e.id},{category: h.category, id:h.id}])
+    if(activeSelection.size === 0){
+      console.log("SORTED GROUPS")
+      console.log(sortedGroups)
+      const body = sortedGroups.get('Body')
+      const entry = sortedGroups.get('Entry')
+      const handle = sortedGroups.get('Handle')
+      if(body && entry && handle){
+        const b = body[0]
+        const e = entry[0]
+        const h = handle[0]
+        if(b && e && h){
+          setActiveSelection([{category:b.category,id: b.id},{category:e.category,id:e.id},{category: h.category, id:h.id}])
+        }
       }
     }
   },[assetMetadata])

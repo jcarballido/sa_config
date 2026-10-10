@@ -22,6 +22,34 @@
       "when": 1790366569390,
       "tag": "0002_free_pete_wisdom",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791335718208,
+      "tag": "0003_heavy_stingray",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791388637985,
+      "tag": "0004_smart_jean_grey",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791400610211,
+      "tag": "0005_normal_wolverine",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791557693469,
+      "tag": "0006_bizarre_power_man",
+      "breakpoints": true
     }
   ]
 }

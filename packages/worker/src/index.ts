@@ -50,20 +50,26 @@ export default {
       status:401
     })
    }
+   const url = new URL(request.url)
+   const { pathname } = url
     // Extract bucket KEY
-    const endpoint = new URL(request.url)
-    const storageKey = endpoint.pathname.slice(1)
-    // console.log("STORAGE KEY:")
-    // console.log(storageKey)
+    const storageKey = pathname.slice(1).replace("products/","")
+    console.log("STORAGE KEY:")
+    console.log(storageKey)
+
     const asset = await env.ASSETS.get(storageKey)
-    console.log("ASSET:")
-    console.log(asset)
-    console.log("ASSET BODY")
-    console.log(asset?.body)
     if(!asset){
       return new Response("Not Found",{
         status:404
       })
+    }
+    if(storageKey.startsWith('renderings')){
+      return new Response(asset.body,{
+        headers:{
+          "Content-Type":"image/avif",
+          "Cache-Control":"private, max-age=60, immutable"
+        }
+      });
     }
     return new Response(asset.body,{
       headers:{

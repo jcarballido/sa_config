@@ -8,7 +8,7 @@ type State = {
   configurations: Map<Configuration["signature"][number],Configuration> | null,
   assetMetadata: Map<AssetMetadata['id'],AssetMetadata> | null,
   imageAssetMetadata: Map<ImageAssetMetadata['configurationId'],ImageAssetMetadata[]> | null,
-  activeImageIds: ImageAssetMetadata['hash'][] | null
+  activeImageIds: ImageAssetMetadata[] | null
   activeSelection: Map<AssetMetadata['category'], AssetMetadata['id']|null>
   activeConfiguration: Configuration | null
 }
@@ -16,7 +16,7 @@ type State = {
 type Action = {
   initialize: () => Promise<void>,
   setActiveSelection: (updates: {category:AssetMetadata['category'], id: AssetMetadata['id']}[]) => void,
-  setActiveImageIds: (arrId: ImageAssetMetadata['hash'][]) => void
+  setActiveImageIds: (arrId: ImageAssetMetadata[]) => void
 }
 
 export const useAppStore = create<State & Action>((set) => ({

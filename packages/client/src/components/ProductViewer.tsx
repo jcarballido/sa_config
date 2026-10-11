@@ -4,6 +4,7 @@ import { OrbitControls } from '@react-three/drei'
 import { ModelViewer } from './ModelViewer'
 import { ErrorBoundary } from './ErrorBoundary'
 import { useAppStore } from '../stores/app.store'
+import useImages from '../hooks/useImages'
 // import { useAppStore } from '../stores/app.store'
 
 type ProductViewerProps = {
@@ -28,11 +29,58 @@ function PreviewError({ message }: { message: string }) {
   )
 }
 
+import { getToken } from '../api/authAdapter'
+
+function ProductImage({ imageUrl}: any) {
+  const [src, setSrc] = useState<string | null>(null);
+
+  useEffect(() => {
+    let objectUrl: string | null = null;
+    let cancelled = false;
+
+    async function loadImage() {
+      const accessToken = getToken()
+      const response = await fetch(`${imageUrl}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to load image");
+      }
+
+      const blob = await response.blob();
+
+      if (cancelled) return;
+
+      objectUrl = URL.createObjectURL(blob);
+      setSrc(objectUrl);
+    }
+
+    loadImage().catch(console.error);
+
+    return () => {
+      cancelled = true;
+
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
+  }, [imageUrl]);
+
+  if (!src) return <div>Loading image...</div>;
+
+  return <img src={src} alt="Configured product" />;
+}
+
 export function ProductViewer({ label, modelUrl, imageUrl, kind, options}: ProductViewerProps) {
   // const { configurations } = useAppStore()
   const [imageError, setImageError] = useState(false)
   const [ open, setOpen ] = useState<boolean>(false)
   const { configurations, activeConfiguration, imageAssetMetadata, activeImageIds, setActiveImageIds  } = useAppStore()
+  const images = useImages()
+  // const {images: array of img src files} = useImages()
   // const activeUrl = kind === 'model' ? modelUrl : imageUrl
   const activeUrl = "model"
   // console.log("CONFIGURATIONS:")
@@ -51,13 +99,13 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, options}: Produ
     //   }
     // }
     if(activeConfiguration?.id){
-      const hashes = imageAssetMetadata?.get(activeConfiguration?.id)?.map(imgData => imgData.hash) || []
+      const hashes = imageAssetMetadata?.get(activeConfiguration?.id) || []
       setActiveImageIds(hashes)
     }
   },[activeConfiguration])
   useEffect(() => {
-    console.log("ACTIVE IMAGES:")
-    console.log(activeImageIds)
+    console.log("IMAGE URLS:")
+    console.log(images)
   },[activeImageIds])
 
   if (!activeUrl) {
@@ -151,17 +199,16 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, options}: Produ
 
   // Image mode
   return (
-    <div className="relative flex-1 min-h-0 overflow-hidden rounded-[28px] border border-zinc-800 bg-[#171717] p-4">
+    <div className="relative flex-1 min-h-0 overscroll-contain  rounded-[28px] border border-zinc-800 bg-[#171717] p-4">
       {imageError ? (
         <PreviewError message="Failed to load image" />
       ) : (
         <div className="relative border border-violet-600 h-full">
           {
-            activeImageIds?.map(imageId => {
+            images?.map(imageKey => {
               return(
-                <div>
-                  
-                  Here is {imageId}
+                <div className='border-2 border-green-500'>
+                  <ProductImage imageUrl={imageKey} />
                 </div>
               )
             })

@@ -6,6 +6,8 @@ import { useAuthStore } from './stores/auth.store'
 import { PRODUCTS } from './viewerConfig'
 // import { getConfigurations } from './api/configurations.api'
 import { useAppStore } from './stores/app.store'
+import Cube from './assets/cube.svg'
+import Images from './assets/images.svg'
 
 export default function App() {
   const { authStatus } = useAuthStore()
@@ -91,7 +93,8 @@ export default function App() {
                   kind === 'model' ? 'bg-zinc-700 text-white' : 'bg-zinc-950 text-zinc-400 hover:bg-zinc-800'
                 }`}
               >
-                <div className="h-3.5 w-3.5 rounded bg-zinc-500" />
+                {/* <div className="h-3.5 w-3.5 rounded bg-zinc-500" /> */}
+                <img src={Cube} className='w-3.5 h-3.5'/>
                 3D model
               </button>
               <button
@@ -100,7 +103,9 @@ export default function App() {
                   kind === 'image' ? 'bg-zinc-700 text-white' : 'bg-zinc-950 text-zinc-400 hover:bg-zinc-800'
                 }`}
               >
-                <div className="h-3.5 w-3.5 rounded bg-zinc-500" />
+                {/* <div className="h-3.5 w-3.5 rounded bg-zinc-500" /> */}
+                <img src={Images} className='w-3.5 h-3.5'/>
+
                 Rendered image
               </button>
             </div>

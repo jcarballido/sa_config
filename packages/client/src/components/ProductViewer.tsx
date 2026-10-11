@@ -6,6 +6,10 @@ import { ErrorBoundary } from './ErrorBoundary'
 import { useAppStore } from '../stores/app.store'
 import useImages from '../hooks/useImages'
 // import { useAppStore } from '../stores/app.store'
+import Eye from '../assets/eye-show.svg'
+import Cube from '../assets/cube.svg'
+import Rotate from '../assets/360-rotate.svg'
+import Images from '../assets/images.svg'
 
 type ProductViewerProps = {
   label: string
@@ -33,6 +37,9 @@ import { getToken } from '../api/authAdapter'
 
 function ProductImage({ imageUrl}: any) {
   const [src, setSrc] = useState<string | null>(null);
+
+  console.log("IMAGE URL PASSED IN: ")
+  console.log(imageUrl)
 
   useEffect(() => {
     let objectUrl: string | null = null;
@@ -70,8 +77,9 @@ function ProductImage({ imageUrl}: any) {
   }, [imageUrl]);
 
   if (!src) return <div>Loading image...</div>;
+  if(!imageUrl) return <div>Images Unavailable</div>
 
-  return <img src={src} alt="Configured product" />;
+  return <img className='object-contain max-h-full grow min-h-0 rounded-2xl' src={src} alt="Configured product" />;
 }
 
 export function ProductViewer({ label, modelUrl, imageUrl, kind, options}: ProductViewerProps) {
@@ -80,6 +88,7 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, options}: Produ
   const [ open, setOpen ] = useState<boolean>(false)
   const { configurations, activeConfiguration, imageAssetMetadata, activeImageIds, setActiveImageIds  } = useAppStore()
   const images = useImages()
+  const [activeImage, setActiveImage] = useState<string|null>(null)
   // const {images: array of img src files} = useImages()
   // const activeUrl = kind === 'model' ? modelUrl : imageUrl
   const activeUrl = "model"
@@ -106,6 +115,7 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, options}: Produ
   useEffect(() => {
     console.log("IMAGE URLS:")
     console.log(images)
+      setActiveImage(images[0])
   },[activeImageIds])
 
   if (!activeUrl) {
@@ -116,7 +126,8 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, options}: Produ
         {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,#393632,transparent_38%),linear-gradient(145deg,#252525,#101010)]" /> */}
         {/* Live preview badge */}
         <div className="absolute left-6 top-6 z-10 flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-2 text-xs font-medium text-[#c6c0b8] backdrop-blur">
-          <div className="h-3.5 w-3.5 rounded bg-zinc-600" />
+          {/* <div className="h-3.5 w-3.5 rounded bg-zinc-600" /> */}
+          <img src={Eye} className='h-3.5 w-3.5'/>
           PREVIEW
         </div>
         {/* Icon button placeholders */}
@@ -151,8 +162,9 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, options}: Produ
         {/* Gradient background */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,#393632,transparent_38%),linear-gradient(145deg,#252525,#101010)]" />
         {/* Live preview badge */}
-        <div className="absolute top-6 left-6 z-10 flex items-center gap-2 text-xs text-[#9b958d]">
-          <div className="h-3.5 w-3.5 rounded bg-zinc-600" />
+        <div className="absolute top-6 left-6 z-10 flex items-center gap-2 text-xs text-[#9b958d] opacity-50">
+          {/* <div className="h-3.5 w-3.5 rounded bg-zinc-600" /> */}
+          <img src={Eye} className='h-6 w-6'/>
           Preview
         </div>
 
@@ -178,7 +190,8 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, options}: Produ
         </div>
         {/* Orbit instructions */}
         <div className="absolute bottom-5 left-6 z-10 flex items-center gap-2 text-xs text-[#9b958d]">
-          <div className="h-3.5 w-3.5 rounded bg-zinc-600" />
+          {/* <div className="h-3.5 w-3.5 rounded bg-zinc-600" /> */}
+          <img src={Rotate} className='w-3.5 h-3.5'/>
           Orbit to inspect · Scroll to zoom
         </div>
         {/* 3D Canvas */}
@@ -199,20 +212,27 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, options}: Produ
 
   // Image mode
   return (
-    <div className="relative flex-1 min-h-0 overscroll-contain  rounded-[28px] border border-zinc-800 bg-[#171717] p-4">
+    <div className=" min-h-0 rounded-[28px] border  border-[rgb(251,44,54)] bg-[#171717] p-4 h-full">
       {imageError ? (
         <PreviewError message="Failed to load image" />
       ) : (
-        <div className="relative border border-violet-600 h-full">
-          {
-            images?.map(imageKey => {
-              return(
-                <div className='border-2 border-green-500'>
-                  <ProductImage imageUrl={imageKey} />
-                </div>
-              )
-            })
-          }
+        <div className="h-full flex flex-col min-h-0 p-4">
+          <div className='h-[85%] flex items-center justify-center'>
+            {images ? <ProductImage imageUrl={activeImage} />: null}
+          </div>          
+          <div className='flex  min-h-0 h-[15%] gap-4 p-2'>
+            {
+              images  
+              ? images.map(imageKey => {
+                return(
+                  <div className={`flex items-center justify-center w-40 bg-black/20 rounded-2xl p-4  hover:opacity-100 ${activeImage === imageKey ? 'opacity-100':'opacity-50'}`} onClick={activeImage === imageKey ? ()=>null:() => setActiveImage(imageKey)}>
+                    <ProductImage imageUrl={imageKey} />
+                  </div>
+                )
+              })
+              : <div>No IMAGES</div>
+            }             
+          </div>
           {/* <img
             src={imageUrl!}
             alt={label}

@@ -92,24 +92,23 @@ export function OptionMenu({setColor, setRotate, rotate}:{setColor: Dispatch<Set
                   })
                 }
                 <div className="" onClick={(e)=>{
-                  
-                  setOpen(prev=>({cat: category, status: true}))
+                  setOpen(prev=>(prev.status && prev.cat === category ?{cat: category, status: false}:{cat: category, status: true}))
                 }}>
                   Color
-                </div>
-                <div className=" text-3xl flex flex-col  justify-left gap-2">
-                  {
-                    isOpen.status && isOpen.cat === category  && colors.map(color => {
-                      return(
-                        <div className="flex justify-left w-full border gap-6 p-3">
-                          <div className={`w-10 h-10 border-white border-2 rounded-full ${color.code}`} onClick={()=>changeColor(category,color.code)}/>
-                          <div className="text-xs flex items-center">
-                            {color.name}
+                  <div className={`text-3xl flex flex-col justify-left gap-2  transition-[transform,opacity] duration-1000 linear border  ${isOpen.status ?' opacity-100 translate-y-0 ':'opacity-0 -translate-y-1 '}`}>
+                    {
+                      isOpen.status && isOpen.cat === category  && colors.map(color => {
+                        return(
+                          <div className={`flex justify-left w-full gap-6 ${isOpen? 'p-2':'p-0'} rounded-xl`} onClick={(e)=>e.stopPropagation()}>
+                            <div className={`w-10 h-10 border-white border-2 rounded-full ${color.code}`} onClick={()=>changeColor(category,color.code)}/>
+                            <div className="text-lg flex items-center">
+                              {color.name}
+                            </div>
                           </div>
-                        </div>
-                      )
-                    })
-                  }
+                        )
+                      })
+                    }
+                  </div>
                 </div>
               </div>
             </div>

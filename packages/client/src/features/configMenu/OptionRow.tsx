@@ -29,7 +29,7 @@ export default function OptionRow({
   return (
     <button
       onClick={onClick}
-      className={`flex w-full items-center justify-between rounded-lg border  px-4 py-3 text-sm font-medium transition ${selected? 'border-amber-200': 'border-blue-400' }`}
+      className={`flex w-full items-center justify-between rounded-lg border  px-4 py-3 text-sm font-medium transition ${selected? 'bg-[rgb(251,44,54)]/10 border-[rgb(251,44,54)]': 'bg-black' }`}
         // ${
         //   selected
         //     ? 'border-purple-500 bg-zinc-800 text-zinc-100'
@@ -37,8 +37,8 @@ export default function OptionRow({
         // }`
     >
       <span>{name}</span>
-      <span className="flex h-5 w-5 items-center justify-center rounded-full border border-zinc-600 text-[10px]">
-        {/* {selected ? '✓' : ''} */}
+      <span className={`flex h-5 w-5 items-center justify-center rounded-full border border-zinc-600 text-base ${selected ? 'bg-red-200 text-black':''}`}>
+        {selected ? '✓' : ''}
       </span>
     </button>
   )

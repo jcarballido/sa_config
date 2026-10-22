@@ -44,13 +44,14 @@ const useAttachment = (scene: THREE.Group, filePath: string, attachmentPointName
   
 }
 
-const Keypad = ({ mainScene, file, color }: {mainScene: THREE.Group, file:string, color?:string}) => {
-  console.log("Running Keypad component.")
-  useAttachment(mainScene, file, 'Keypad_Mount_Door-1', 'KEYPAD',{color})
+const Keypad = ({ mainScene, file }: {mainScene: THREE.Group, file:string}) => {
+  const {activeColorSelection} = useAppStore()
+  useAttachment(mainScene, file, 'Keypad_Mount_Door-1', 'KEYPAD',{color: activeColorSelection?.entry.code.replace("bg-","").replace("[","").replace("]","")})
   return null
 }
-const Handle = ({ mainScene, file, color }: {mainScene: THREE.Group, file:string, color?:string}) => {
-  useAttachment(mainScene, file, 'Drop_Handle_Mount-1', 'HANDLE',{color})
+const Handle = ({ mainScene, file}: {mainScene: THREE.Group, file:string}) => {
+  const {activeColorSelection} = useAppStore()
+  useAttachment(mainScene, file, 'Drop_Handle_Mount-1', 'HANDLE',{color: activeColorSelection?.handle.code.replace("bg-","").replace("[","").replace("]","")})
   return null
 }
 
@@ -75,6 +76,7 @@ const Safe = ({
   const {scene} = useGLTF(body)
   const [hinge, setHinge] = useState<THREE.Object3D|null>(null)
 
+  const { activeColorSelection } = useAppStore()
 
   useEffect(() => {
     if (!scene) return;
@@ -84,6 +86,21 @@ const Safe = ({
     if (!bodyHinge || !door) return
     const originalParent = door.parent;
     bodyHinge.attach(door);
+
+    const instance = scene.clone()
+    const color = activeColorSelection?.body.code.replace('bg-','').replace('[','').replace(']','')
+    console.log("ACTIVE COLOR")
+    console.log(activeColorSelection)
+    console.log("COLOR IN USEATTACHMENT: ",color)
+
+    if(color !== undefined) {
+      instance.traverse((object) => {
+      if (object instanceof THREE.Mesh) {
+      const material = object.material as THREE.MeshStandardMaterial;
+      material.color.set(color);
+      }
+      })
+    };
     // if(rotate && hinge) {
 
     //   if(rotate) hinge.rotation.y = THREE.MathUtils.degToRad(120);
@@ -115,8 +132,8 @@ const Safe = ({
       {body && entry && handle && 
         <>
           <primitive object={scene} />
-          <Keypad mainScene={scene} file={entry} color={options?.color?.entry} />
-          <Handle mainScene={scene} file={handle} color={options?.color?.handle} />        
+          <Keypad mainScene={scene} file={entry} />
+          <Handle mainScene={scene} file={handle} />        
         </>
       }
     </>

@@ -29,14 +29,14 @@ export default function OptionRow({
   return (
     <button
       onClick={onClick}
-      className={`flex w-full items-center justify-between rounded-lg border  px-4 py-3 text-sm font-medium transition ${selected? 'bg-[rgb(251,44,54)]/10 border-[rgb(251,44,54)]': 'bg-black' }`}
+      className={`flex w-full items-center justify-between rounded-lg border  px-4 py-3 text-sm font-medium transition ${selected? 'bg-[rgb(251,44,54)]/10 border-[rgb(251,44,54)]': 'bg-transparent border-white/20' }`}
         // ${
         //   selected
         //     ? 'border-purple-500 bg-zinc-800 text-zinc-100'
         //     : 'border-green-500 bg-zinc-950 text-zinc-400 hover:border-zinc-700 hover:bg-zinc-900'
         // }`
     >
-      <span>{name}</span>
+      <span className={`${selected? 'text-white font-bold':' text-white/45'}`} >{name}</span>
       <span className={`flex h-5 w-5 items-center justify-center rounded-full border border-zinc-600 text-base ${selected ? 'bg-red-200 text-black':''}`}>
         {selected ? '✓' : ''}
       </span>

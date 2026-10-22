@@ -7,22 +7,22 @@ import { useAppStore } from '../stores/app.store'
 import useImages from '../hooks/useImages'
 // import { useAppStore } from '../stores/app.store'
 import Eye from '../assets/eye-show.svg'
-import Cube from '../assets/cube.svg'
+// import Cube from '../assets/cube.svg'
 import Rotate from '../assets/360-rotate.svg'
-import Images from '../assets/images.svg'
+// import Images from '../assets/images.svg'
 
 type ProductViewerProps = {
-  label: string
-  modelUrl: string | null
-  imageUrl: string | null
+  // label: string
+  // modelUrl: string | null
+  // imageUrl: string | null
   kind: 'model' | 'image'
   // color: string | null,
-  options?:{
-    color:{
-      keypad?:string,
-      handle?:string
-    }
-  }
+  // options?:{
+  //   color:{
+  //     entry?:{name:string,code:string},
+  //     handle?:{name:string,code:string}
+  //   }
+  // }
 }
 
 function PreviewError({ message }: { message: string }) {
@@ -82,11 +82,11 @@ function ProductImage({ imageUrl}: any) {
   return <img className='object-contain max-h-full grow min-h-0 rounded-2xl' src={src} alt="Configured product" />;
 }
 
-export function ProductViewer({ label, modelUrl, imageUrl, kind, options}: ProductViewerProps) {
+export function ProductViewer({ kind }: ProductViewerProps) {
   // const { configurations } = useAppStore()
   const [imageError, setImageError] = useState(false)
   const [ open, setOpen ] = useState<boolean>(false)
-  const { configurations, activeConfiguration, imageAssetMetadata, activeImageIds, setActiveImageIds  } = useAppStore()
+  const { activeConfiguration, imageAssetMetadata, activeImageIds, setActiveImageIds  } = useAppStore()
   const images = useImages()
   const [activeImage, setActiveImage] = useState<string|null>(null)
   // const {images: array of img src files} = useImages()
@@ -94,9 +94,9 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, options}: Produ
   const activeUrl = "model"
   // console.log("CONFIGURATIONS:")
   // console.log(configurations)
-  useEffect(() => {
-    setImageError(false)
-  }, [imageUrl])
+  // useEffect(() => {
+  //   setImageError(false)
+  // }, [imageUrl])
 
   useEffect(() => {
     // console.log("Active Config: ")
@@ -150,7 +150,7 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, options}: Produ
           <p className="text-sm text-zinc-500 bg-yellow-300">
             {kind === 'model' ? '3D model placeholder' : 'Render placeholder'}
           </p>
-          <p className="text-xs text-zinc-600">{label}</p>
+          {/* <p className="text-xs text-zinc-600">{label}</p> */}
         </div>
       </div>
     )
@@ -195,13 +195,13 @@ export function ProductViewer({ label, modelUrl, imageUrl, kind, options}: Produ
           Orbit to inspect · Scroll to zoom
         </div>
         {/* 3D Canvas */}
-        <ErrorBoundary key={modelUrl} fallback={<PreviewError message="Failed to load 3D model" />}>
-          <Canvas key={modelUrl} camera={{ position: [4.4, 3.1, 5.4], fov: 38 }} dpr={[1, 2]} shadows>
+        <ErrorBoundary fallback={<PreviewError message="Failed to load 3D model" />}>
+          <Canvas  camera={{ position: [4.4, 3.1, 5.4], fov: 38 }} dpr={[1, 2]} shadows>
             <ambientLight intensity={0.8} />
             <directionalLight position={[4, 6, 4]} intensity={3} castShadow />
             <directionalLight position={[4, -1, 1]} intensity={2} color="#ff7a1a" />
             <Suspense fallback={null}>
-              <ModelViewer rotate={open} options={options} />
+              <ModelViewer rotate={open}  />
             </Suspense>
             <OrbitControls enablePan={false} minDistance={1} maxDistance={4} minPolarAngle={0.65} maxPolarAngle={1.5} />
           </Canvas>

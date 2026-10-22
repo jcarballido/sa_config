@@ -3,38 +3,40 @@ import { ProductViewer } from './components/ProductViewer'
 import { ProductControls } from './components/ProductControls'
 import { Login } from './components/Login'
 import { useAuthStore } from './stores/auth.store'
-import { PRODUCTS } from './viewerConfig'
+// import { PRODUCTS } from './viewerConfig'
 // import { getConfigurations } from './api/configurations.api'
 import { useAppStore } from './stores/app.store'
 import Cube from './assets/cube.svg'
 import Images from './assets/images.svg'
+// import colorVariants from '../src/constants/colorVariants'
+// import type { ColorOption } from './components/types'
 
 export default function App() {
   const { authStatus } = useAuthStore()
   const { initialize, initialized, imageAssetMetadata } = useAppStore()
-  const [productId, setProductId] = useState(PRODUCTS[0].id)
-  const [variantIndex, setVariantIndex] = useState(0)
+  // const [productId, setProductId] = useState(PRODUCTS[0].id)
+  // const [variantIndex, setVariantIndex] = useState(0)
   const [kind, setKind] = useState<'model' | 'image'>('model')
   // const [color, setColor] = useState<string | null>(null)
   const [pinged, setPinged] = useState<boolean>(false)
-  const [color, setColor] = useState<{color:{entry:string,handle:string}}>({color:{handle:"#FFFFFF",entry:"#FFFFFF"}})
+  // const [color, setColor] = useState<{color:ColorOption}>({color:{body:{name:"",code:""},handle:{name:"",code:""},entry:{name:"",code:""}}})
   const [ rotate, setRotate ] =useState<boolean>(false)
 
-  const product = PRODUCTS.find((p) => p.id === productId) ?? PRODUCTS[0]
-  const variant = product.variants[Math.min(variantIndex, product.variants.length - 1)]
+  // const product = PRODUCTS.find((p) => p.id === productId) ?? PRODUCTS[0]
+  // const variant = product.variants[Math.min(variantIndex, product.variants.length - 1)]
 
-  function handleProductChange(id: string) {
-    setProductId(id)
-    setVariantIndex(0)
-    // setColor(null)
-  }
+  // function handleProductChange(id: string) {
+  //   setProductId(id)
+  //   setVariantIndex(0)
+  //   // setColor(null)
+  // }
 
-  function handleVariantChange(index: number) {
-    setVariantIndex(index)
-    // setColor(null)
-  }
+  // function handleVariantChange(index: number) {
+  //   setVariantIndex(index)stringstring
+  //   // setColor(null)
+  // }
 
-  const summary = `${product.name} / ${variant.label} / ${kind === 'model' ? '3D Model' : 'Render'}`
+  // const summary = `${product.name} / ${variant.label} / ${kind === 'model' ? '3D Model' : 'Render'}`
 
   useEffect(() => {
     if (authStatus.status === 'authenticated' && !pinged) {
@@ -52,6 +54,16 @@ export default function App() {
     console.log("ImageAssetMetadata")
     console.log(imageAssetMetadata)
   })
+
+  // useEffect(() => {
+  //   setColor({
+  //     color:{
+  //       body:colorVariants.body[0],
+  //       entry:colorVariants.entry[0],
+  //       handle:colorVariants.handle[0]
+  //     }
+  //   })
+  // },[])
   
 
   if (authStatus.status === 'unauthenticated') {
@@ -62,7 +74,7 @@ export default function App() {
     <main className="flex flex-col w-full h-full overflow-hidden bg-zinc-950 text-zinc-100 absolute">
       {/* Header */}
       <header className="shrink-0 flex items-center justify-between border-b border-zinc-800 px-4 py-2 lg:px-6">
-        <div className="flex items-center gap-3">
+        <div className="flex items-cestringnter gap-3">
           {/* Placeholder for brand icon */}
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800">
             
@@ -83,7 +95,7 @@ export default function App() {
           {/* Title row with mode switch */}
           <div className="flex items-end justify-between">
             <div>
-              <p className="font-mono text-[10px] tracking-[0.22em] text-zinc-500">Product / {product.id.toUpperCase()}</p>
+              <p className="font-mono text-[10px] tracking-[0.22em] text-zinc-500">Product / </p>
               <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-zinc-100">Build the safe</h2>
             </div>
             <div className="flex overflow-hidden rounded-lg border border-zinc-700 text-sm">
@@ -113,13 +125,12 @@ export default function App() {
 
           {/* Preview area */}
           <ProductViewer
-            label={`${product.name} · ${variant.label}`}
-            modelUrl={variant.modelUrl}
-            imageUrl={variant.imageUrl}
+            // label={`${product.name} · ${variant.label}`}
+            // modelUrl={variant.modelUrl}
+            // imageUrl={variant.imageUrl}
             kind={kind}
             // color={color}
-            options={color}
-            rotate={rotate}
+            // options={color}
           />
 
           {/* Current configuration bar */}
@@ -133,7 +144,7 @@ export default function App() {
         </section>
 
         {/* Right sidebar */}
-        <ProductControls setColor={setColor} setRotate={setRotate} rotate={rotate}/>
+        <ProductControls  setRotate={setRotate} rotate={rotate}/>
       </div>
     </main>
   )

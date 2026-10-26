@@ -87,41 +87,49 @@ const ColorSwatch = ({isOpen, category, toggleOpen }: ColorSwatch) => {
   },[activeColorSelection])
 
   return (
-    <>
-      <div className='w-full border px-4 py-1 rounded-lg border-white/20 bg-gray-500/10 flex justify-between' onClick={()=>toggleOpen(category)}>
-        <div className='flex items-center'>Color</div>
-        <div className='px-2 flex items-center gap-1 bg-gray-600 py-1 rounded-sm'>
+    <div className='flex flex-col text-nowrap text-sm gap-2'>
+      {/* <div className='w-full border px-4 py-1 rounded-lg border-white/20 bg-gray-500/10 flex justify-between' onClick={()=>toggleOpen(category)}> */}
+        {/* <div className='flex items-center'>Color</div>
+        <div className='px-2 flex items-center gap-1 py-1 rounded-sm'>
           <div className={`h-4 w-4 border-2 rounded-full flex justify-center items-center ${selected.code}`} />
           <div className='flex items-center justify-center '>
             {selected.name}
           </div>
-          <img className={`w-4 aspect-square transition-transform ${isOpen ? 'rotate-0':'rotate-18'}`} src={Chevron} />
-        </div>
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        <AnimatePresence>
+          <img className={`w-4 aspect-square transition-transform duration-150 ease-linear ${isOpen[category] ? '-rotate-180':'rotate-0'}`} src={Chevron} />
+        </div> */}
+      {/* </div> */}
+      <div className="flex gap-4">
+        {/* <AnimatePresence> */}
             {
-              isOpen[category] && colorOptions!.map(color => {
+              colorOptions!.map(color => {
                 return(
-                  <motion.div 
-                  key={color.code}
-                  initial={{ opacity: 0, y: -8, scale: 0.98 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -8, scale: 0.98 }}
-                  transition={{ duration: 0.2 }}
-                  className={`flex flex-col border  justify-center items-center ${isOpen? 'p-2':'p-0 '} ${color.name === selected.name ? 'border-green-400':' border-white'} rounded-xl`} onClick={(e)=>e.stopPropagation()}
-                  >
-                    <div className={`h-6 w-6 border-2 rounded-full flex justify-center items-center ${color.code}`} onClick={()=>changeColor(category,color)}/>
-                    <div className="flex items-center justify-center">
-                      {color.name}
-                    </div>
-                  </motion.div>
+                  <>
+                    <div 
+                    key={color.code}
+                    // initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                    // animate={{ opacity: 1, y: 0, scale: 1 }}
+                    // exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                    // transition={{ duration: 0.2 }}
+                    className={`flex  justify-center items-center ${isOpen? 'p-0':'p-0 '} ${color.name === selected.name ? 'border-green-400':' border-white'} rounded-xl`} onClick={(e)=>e.stopPropagation()}
+                    >
+                      <div className={`rounded-full border-2 ${color.name === selected.name? 'border-white':'border-zinc-700'} p-1`}>
+                        <div className={`h-6 w-6 rounded-full flex justify-center items-center ${color.code}`} onClick={()=>changeColor(category,color)}/>
+                          {/* <div className='bg-red-400 h-full w-full'>
+                            
+                          </div> */}
+                      </div>
+
+                      </div>
+                  </>
                 )
               })
             }
-        </AnimatePresence>
+        {/* </AnimatePresence> */}
       </div>
-    </>
+      <div className="flex items-center justify-start">
+        Finish: {selected.name}
+      </div>
+    </div>
 
   )
 }

@@ -19,7 +19,7 @@ const useAttachment = (scene: THREE.Group, filePath: string, attachmentPointName
   const { scene: attachment } = useGLTF(filePath)
 
   useEffect(() => {
-    console.log('Running useEffect')
+    // console.log('Running useEffect')
     const mount = scene?.getObjectByName(attachmentPointName)
     if (!mount) {
       console.log(`Attachemnt point for ${accessory} was not found`)
@@ -27,7 +27,7 @@ const useAttachment = (scene: THREE.Group, filePath: string, attachmentPointName
     }
     const instance = attachment.clone()
     const color = options?.color
-    console.log("COLOR IN USEATTACHMENT: ",color)
+    // console.log("COLOR IN USEATTACHMENT: ",color)
 
     if(color !== undefined) {
       instance.traverse((object) => {
@@ -75,8 +75,31 @@ const Safe = ({
   if(!body) return null
   const {scene} = useGLTF(body)
   const [hinge, setHinge] = useState<THREE.Object3D|null>(null)
+  const [ color, setColor ] = useState<string>()
 
   const { activeColorSelection } = useAppStore()
+
+  useEffect(() => {
+    console.log("ACTIVE color selection")
+    console.log(activeColorSelection?.body)
+    if(!activeColorSelection?.body) return
+    setColor(activeColorSelection?.body.code.replace('bg-','').replace('[','').replace(']',''))
+    // const instance = scene.clone()
+    // const color = activeColorSelection?.body.code.replace('bg-','').replace('[','').replace(']','')
+    // if (attachmentPoints.includes(object)) {
+    //   return;
+    // }
+    // if(color !== undefined) {
+    //   scene.traverse((object) => {
+    //   if (object instanceof THREE.Mesh) {
+    //   const material = object.material as THREE.MeshStandardMaterial;
+    //   material.color.set(color);
+    //   }
+    //   })
+    // };
+  },[activeColorSelection?.body])
+
+
 
   useEffect(() => {
     if (!scene) return;
@@ -86,21 +109,43 @@ const Safe = ({
     if (!bodyHinge || !door) return
     const originalParent = door.parent;
     bodyHinge.attach(door);
+    console.log("COLOR:")
+    console.log(color)
+    if (color !== undefined) {
+      const updateColor = (object: THREE.Object3D) => {
+      if ([door].includes(object)) return;
 
-    const instance = scene.clone()
-    const color = activeColorSelection?.body.code.replace('bg-','').replace('[','').replace(']','')
-    console.log("ACTIVE COLOR")
-    console.log(activeColorSelection)
-    console.log("COLOR IN USEATTACHMENT: ",color)
-
-    if(color !== undefined) {
-      instance.traverse((object) => {
       if (object instanceof THREE.Mesh) {
-      const material = object.material as THREE.MeshStandardMaterial;
-      material.color.set(color);
-      }
-      })
+        const materials = Array.isArray(object.material)
+          ? object.material
+          : [object.material];
+
+      materials.forEach((material) => {
+        if (material instanceof THREE.MeshStandardMaterial) {
+          material.color.set(color);
+        }
+      });
+    }
+
+    object.children.forEach(updateColor);
     };
+      updateColor(scene);
+    }
+
+    // const instance = scene.clone()
+    // const color = activeColorSelection?.body.code.replace('bg-','').replace('[','').replace(']','')
+    // console.log("ACTIVE COLOR")
+    // console.log(activeColorSelection)
+    // console.log("COLOR IN USEATTACHMENT: ",color)
+
+    // if(color !== undefined) {
+    //   instance.traverse((object) => {
+    //   if (object instanceof THREE.Mesh) {
+    //   const material = object.material as THREE.MeshStandardMaterial;
+    //   material.color.set(color);
+    //   }
+    //   })
+    // };
     // if(rotate && hinge) {
 
     //   if(rotate) hinge.rotation.y = THREE.MathUtils.degToRad(120);
@@ -111,7 +156,7 @@ const Safe = ({
         originalParent.attach(door);
       }
     };
-  }, [body,options])
+  }, [body,color])
 
   useFrame((_,delta) => {
     if(!hinge) {
@@ -163,8 +208,8 @@ export function ModelViewer({ rotate,options }: ModelViewerProps) {
             Entry ID: ${entryId}
             Handle ID: ${handleId}`)
         }
-            console.log("COLOR OPTIONS: ")
-            console.log(options)
+            // console.log("COLOR OPTIONS: ")
+            // console.log(options)
 
         const body = await getAsset(bodyId)
         const entry = await getAsset(entryId)

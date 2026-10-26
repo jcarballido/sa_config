@@ -5,7 +5,7 @@ import { useAppStore } from "../stores/app.store"
 // import { AnimatePresence, motion } from 'motion/react'
 // import { entryColors, bodyColors, handleColors } from "../constants/colorVariants"
 import ColorSwatch from "../features/configMenu/ColorSwatch"
-
+import Safe from '../assets/safe.svg'
 export function OptionMenu({setRotate, rotate}:{setRotate: Dispatch<SetStateAction<boolean>>, rotate: boolean}){
   const { assetMetadata, activeSelection, setActiveSelection } = useAppStore()
   const groups = new Map<string, AssetMetadataArray>()
@@ -33,8 +33,8 @@ export function OptionMenu({setRotate, rotate}:{setRotate: Dispatch<SetStateActi
 
   useEffect(() => {
     if(activeSelection.size === 0){
-      console.log("SORTED GROUPS")
-      console.log(sortedGroups)
+      // console.log("SORTED GROUPS")
+      // console.log(sortedGroups)
       const body = sortedGroups.get('Body')
       const entry = sortedGroups.get('Entry')
       const handle = sortedGroups.get('Handle')

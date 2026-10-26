@@ -50,10 +50,6 @@ export default function App() {
     }
   },[authStatus.user])
 
-  useEffect(() => {
-    console.log("ImageAssetMetadata")
-    console.log(imageAssetMetadata)
-  })
 
   // useEffect(() => {
   //   setColor({
@@ -73,7 +69,7 @@ export default function App() {
   return (
     <main className="flex flex-col w-full h-full overflow-hidden bg-zinc-950 text-zinc-100 absolute">
       {/* Header */}
-      <header className="shrink-0 flex items-center justify-between border-b border-zinc-800 px-4 py-2 lg:px-6">
+      <header className="shrink-0 flex items-center justify-between border-b border-zinc-800 px-4 py-4 lg:px-6">
         <div className="flex items-cestringnter gap-3">
           {/* Placeholder for brand icon */}
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800">
@@ -81,8 +77,8 @@ export default function App() {
             <div className="h-4 w-4 rounded bg-[rgb(251,44,54)]" />
           </div>
           <div>
-            <p className="font-mono text-[18px] tracking-[0.22em] text-zinc-100">sa_config</p>
-            <h1 className="text-xs font-semibold tracking-tight  text-zinc-500">Security Product Configurator</h1>
+            <p className="font-mono text-[18px] tracking-[0.08em] text-zinc-100">SA_CONFIG</p>
+            <h1 className="text-xs font-semibold tracking-tight  text-zinc-500">Design Your Safe</h1>
           </div>
         </div>
         {/* <span className="hidden text-xs text-zinc-500 sm:block">Unsaved configuration</span> */}
@@ -93,33 +89,36 @@ export default function App() {
         {/* Left section */}
         <section className="flex min-w-0 min-h-0 flex-1 flex-col gap-4">
           {/* Title row with mode switch */}
-          <div className="flex items-end justify-between">
+          <div className="flex items-end justify-between ">
             <div>
-              <p className="font-mono text-[10px] tracking-[0.22em] text-zinc-500">Product / </p>
-              <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-zinc-100">Build the safe</h2>
+              {/* <p className="font-mono text-[10px] tracking-[0.22em] text-zinc-500">Product / </p> */}
+              <h2 className="mt-1 text-3xl font-semibold tracking-[-0.04em] text-zinc-100">Build your safe</h2>
             </div>
-            <div className="flex overflow-hidden rounded-lg border border-zinc-700 text-sm">
-              <button
-                onClick={() => setKind('model')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 transition ${
-                  kind === 'model' ? 'bg-zinc-700 text-white' : 'bg-zinc-950 text-zinc-400 hover:bg-zinc-800'
-                }`}
-              >
-                {/* <div className="h-3.5 w-3.5 rounded bg-zinc-500" /> */}
-                <img src={Cube} className='w-3.5 h-3.5'/>
-                3D model
-              </button>
-              <button
-                onClick={() => setKind('image')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 transition ${
-                  kind === 'image' ? 'bg-zinc-700 text-white' : 'bg-zinc-950 text-zinc-400 hover:bg-zinc-800'
-                }`}
-              >
-                {/* <div className="h-3.5 w-3.5 rounded bg-zinc-500" /> */}
-                <img src={Images} className='w-3.5 h-3.5'/>
+            <div className='border border-zinc-500 p-1  rounded-lg'>
+              <div className="flex relative text-sm ">
+                <div className={`bg-zinc-600 w-1/2 absolute h-full rounded-sm  transition-transform duration-300 ease-in-out ${kind === 'model'? 'translate-x-0':'translate-x-full '}`} />
+                <button
+                  onClick={() => setKind('model')}
+                  className={`flex items-center justify-center gap-1.5  py-1.5 transition w-1/2  z-10 ${
+                    kind === 'model' ? ' text-white ' : ' text-zinc-400 '
+                  }`}
+                >
+                  {/* <div className="h-3.5 w-3.5 rounded bg-zinc-500" /> */}
+                  <img src={Cube} className='w-3.5 h-3.5'/>
+                  3D view
+                </button>
+                <button
+                  onClick={() => setKind('image')}
+                  className={`flex items-center gap-1.5 px-7 w-1/2 justify-center py-1.5 text-nowrap transition rounded-lg z-10 ${
+                    kind === 'image' ? ' text-white' : ' text-zinc-400  '
+                  }`}
+                >
+                  {/* <div className="h-3.5 w-3.5 rounded bg-zinc-500" /> */}
+                  <img src={Images} className='w-3.5 h-3.5 '/>
 
-                Rendered image
-              </button>
+                  Photo View
+                </button>
+              </div>
             </div>
           </div>
 
@@ -129,6 +128,7 @@ export default function App() {
             // modelUrl={variant.modelUrl}
             // imageUrl={variant.imageUrl}
             kind={kind}
+            setKind={setKind}
             // color={color}
             // options={color}
           />

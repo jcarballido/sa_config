@@ -21,6 +21,17 @@
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgb(100 50 10 / 15%) transparent;
+    scrollbar-color: rgba(198, 195, 193, 0.15) transparent;
+  }
+}
+
+@theme {
+  @keyframes slide {
+    from {
+      transform:translateX(0);
+    }
+    to {
+      transform:translateX(300%);
+    }
   }
 }

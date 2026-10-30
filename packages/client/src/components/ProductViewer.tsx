@@ -97,7 +97,7 @@ function ProductImage({ imageUrl, setKind}: any) {
   }, [imageUrl]);
 
   if (!src) return (
-      <div className='w-full h-full flex justify-center items-center  bg-transparent p-20'>
+      <div className='w-full h-full flex justify-center items-center  bg-transparent p-10'>
         <div className='w-full h-full rounded-xl relative overflow-hidden border border-zinc-800'>
           <div className='absolute w-[75%] h-[200%] right-full bg-linear-[100deg] from-[#171717] from-20% via-[#1C1C1C] via-50% to-[#171717] to-80% animate-[slide_5s_linear_infinite]'></div>
           {/* Loading image... */}
@@ -108,9 +108,9 @@ function ProductImage({ imageUrl, setKind}: any) {
   if(!imageUrl) {
     console.log("NO IMAGE URL") 
     return (
-    <div className='flex flex-col gap-10 items-center'>
-      <img src= {Safe} className=' grow-0 max-h-100' />
-      <span className='text-xl'>
+    <div className='flex flex-col gap-10 items-center '>
+      <img src={Safe} className='grow h-[600px]' />
+      <span className='text-xl text-zinc-600'>
         No renders for this combination of options yet
       </span>
       <button className='border border-zinc-500 max-w-fit p-4 rounded-lg font-bold hover:bg-zinc-700' onClick={()=>{setKind('model')}}>
@@ -217,7 +217,7 @@ export function ProductViewer({ kind, setKind }: ProductViewerProps) {
 
   if (kind === 'model') {
     return (
-      <div className="relative min-h-130 flex-1 overflow-hidden rounded-[28px] border border-white/20  bg-[#171717] shadow-[0_24px_80px_rgba(0,0,0,0.35)] ">
+      <div className="relative min-h-130 flex-1 overflow-hidden rounded-[28px] border border-white/20  bg-[#171719] shadow-[0_24px_80px_rgba(0,0,0,0.35)] ">
         {/* Gradient background */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,#393632,transparent_38%),linear-gradient(145deg,#252525,#101010)]" />
         {/* Live preview badge */}
@@ -258,7 +258,7 @@ export function ProductViewer({ kind, setKind }: ProductViewerProps) {
           <Canvas  camera={{ position: [4.4, 3.1, 5.4], fov: 38 }} dpr={[1, 2]} shadows>
             <ambientLight intensity={0.8} />
             <directionalLight position={[4, 6, 4]} intensity={3} castShadow />
-            <directionalLight position={[4, -1, 1]} intensity={2} color="#ff7a1a" />
+            <directionalLight position={[-8, -1, 5]} intensity={2} color="#FFFFFF" />
             <Suspense fallback={null}>
               <ModelViewer rotate={open}  />
             </Suspense>

@@ -3,7 +3,7 @@ export function SidebarHeader(){
   <div className="flex items-start justify-between border-b border-zinc-800 pb-5">
     <div>
       {/* <p className="font-mono  tracking-[0.22em] text-zinc-500">Customizer</p> */}
-      <h2 className="mt-1 text-xl font-semibold tracking-[-0.03em] text-zinc-100">Your Configuration</h2>
+      <h2 className="mt-1 text-3xl font-bold tracking-[-0.06em] text-zinc-100">Your Configuration</h2>
     </div>
   </div>  
   )

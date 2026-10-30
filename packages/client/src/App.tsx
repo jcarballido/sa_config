@@ -67,32 +67,32 @@ export default function App() {
   }
 
   return (
-    <main className="flex flex-col w-full h-full overflow-hidden bg-zinc-950 text-zinc-100 absolute">
+    <main className="flex flex-col w-full h-full overflow-hidden bg-[#0B0B0D] text-zinc-100 absolute font-manrope">
       {/* Header */}
       <header className="shrink-0 flex items-center justify-between border-b border-zinc-800 px-4 py-4 lg:px-6">
-        <div className="flex items-cestringnter gap-3">
+        <div className="flex items-center gap-3">
           {/* Placeholder for brand icon */}
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800">
             
             <div className="h-4 w-4 rounded bg-[rgb(251,44,54)]" />
           </div>
           <div>
-            <p className="font-mono text-[18px] tracking-[0.08em] text-zinc-100">SA_CONFIG</p>
-            <h1 className="text-xs font-semibold tracking-tight  text-zinc-500">Design Your Safe</h1>
+            <p className="font-mono text-[24px] tracking-[0.08em] text-zinc-100">SA_CONFIG</p>
+            <h1 className="text-sm font-black tracking-tight  text-zinc-500">Design Your Safe</h1>
           </div>
         </div>
         {/* <span className="hidden text-xs text-zinc-500 sm:block">Unsaved configuration</span> */}
       </header>
 
       {/* Main content */}
-      <div className="flex flex-1 min-h-0 overflow-hidden  w-full flex-col gap-6 p-3 lg:flex-row lg:p-6 h-full">
+      <div className="flex flex-1 min-h-0 overflow-hidden  w-full flex-col gap-12 lg:flex-row lg:p-8 h-full">
         {/* Left section */}
-        <section className="flex min-w-0 min-h-0 flex-1 flex-col gap-4">
+        <section className="flex min-w-0 min-h-0 flex-1 flex-col justify-evenly  gap-4">
           {/* Title row with mode switch */}
-          <div className="flex items-end justify-between ">
+          <div className="flex items-center justify-between ">
             <div>
               {/* <p className="font-mono text-[10px] tracking-[0.22em] text-zinc-500">Product / </p> */}
-              <h2 className="mt-1 text-3xl font-semibold tracking-[-0.04em] text-zinc-100">Build your safe</h2>
+              <h2 className="mt-1 text-3xl font-bold tracking-[-0.06em] text-zinc-100">Build Your Safe</h2>
             </div>
             <div className='border border-zinc-500 p-1  rounded-lg'>
               <div className="flex relative text-sm ">

@@ -70,15 +70,15 @@ export function OptionMenu({setRotate, rotate}:{setRotate: Dispatch<SetStateActi
   }
 
   return(
-    <div className="flex flex-col gap-7 py-6 flex-1 min-h-0 overflow-y-auto overscroll-contain ">
+    <div className="flex flex-col gap-10 py-6 flex-1 min-h-0 overflow-y-auto overscroll-contain ">
       {
         Array.from(sortedGroups,([category, assets],index) =>{
           return (
             <div key={category} className="">
               <div className="mb-3 flex items-center justify-between">
-                <label className="text-sm font-semibold capitalize text-zinc-100 tracking-widest">0{index+1} / {category}</label>
+                <label className="text-xl capitalize text-zinc-100 tracking-tighter font-semibold">0{index+1} / {category}</label>
               </div>
-              <div className="flex flex-col gap-4 px-2">
+              <div className="flex flex-col gap-2 px-2">
                 {
                   assets.map( asset => {
                     return (

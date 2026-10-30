@@ -5,7 +5,7 @@ import type { Dispatch, SetStateAction } from 'react'
 export function ProductControls({setRotate, rotate}:{setRotate: Dispatch<SetStateAction<boolean>>,rotate: boolean}) {
 
   return (
-    <aside className="w-full rounded-3xl border border-zinc-800 bg-zinc-900 p-5 lg:max-w-97.5 lg:p-6 flex flex-col overflow-hidden">
+    <aside className="w-full rounded-3xl border border-zinc-800 bg-[#1C1C20] p-5 lg:max-w-120 lg:p-6 flex flex-col overflow-hidden  font-extrabold">
       <SidebarHeader />
       <OptionMenu setRotate={setRotate} rotate={rotate}/>
       {/* <div className="border-t border-zinc-800 pt-5">

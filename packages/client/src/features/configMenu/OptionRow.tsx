@@ -29,17 +29,17 @@ export default function OptionRow({
   return (
     <button
       onClick={onClick}
-      className={`flex w-full items-center justify-between rounded-lg border  px-4 py-3 text-sm font-medium transition ${selected? 'bg-[#C9C8C4]/10 border-white': ' border-zinc-700 bg-black/70' }`}
+      className={`flex w-full items-center justify-between rounded-lg border px-4 py-3 text-sm font-medium transition ${selected? 'bg-[rgb(251,44,54)]/5 border-[rgb(251,44,54)]': ' border-zinc-700 bg-black/70' }`}
         // ${
         //   selected
         //     ? 'border-purple-500 bg-zinc-800 text-zinc-100'
         //     : 'border-green-500 bg-zinc-950 text-zinc-400 hover:border-zinc-700 hover:bg-zinc-900'
         // }`
     >
-      <span className={`${selected? 'text-white font-bold':' text-white'}`} >{name}</span>
-      <span className={`flex h-5 w-5 items-center justify-center rounded-full border-2 border-white text-base p-1 ${selected ? 'border-white':'border-zinc-700'} `}>
+      <span className={`${selected? 'text-white font-semibold':' text-white font-light'}`} >{name}</span>
+      <span className={`flex h-4 w-4 items-center justify-center rounded-full border  text-base p-1 ${selected ? 'border-[rgb(251,44,54)]':'border-zinc-700'} `}>
         {/* <div  className="h-full aspect-square rounded-full p-0.5 bg-white"/> */}
-        {selected ?         <div  className="h-full aspect-square rounded-full p-0.5 bg-white"/>
+        {selected ?         <div  className="h-full aspect-square rounded-full p-0.5 bg-[rgb(251,44,54)]"/>
  : null}
       </span>
     </button>

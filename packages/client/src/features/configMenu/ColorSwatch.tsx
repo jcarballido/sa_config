@@ -112,7 +112,7 @@ const ColorSwatch = ({isOpen, category, toggleOpen }: ColorSwatch) => {
                     // transition={{ duration: 0.2 }}
                     className={`flex  justify-center items-center ${isOpen? 'p-0':'p-0 '} ${color.name === selected.name ? 'border-green-400':' border-white'} rounded-xl`} onClick={(e)=>e.stopPropagation()}
                     >
-                      <div className={`rounded-full border-2 ${color.name === selected.name? 'border-white':'border-zinc-700'} p-1`}>
+                      <div className={`rounded-full border-2 ${color.name === selected.name? 'border-[rgb(251,44,54)]/60':'border-zinc-700/40'} p-1`}>
                         <div className={`h-6 w-6 rounded-full flex justify-center items-center ${color.code}`} onClick={()=>changeColor(category,color)}/>
                           {/* <div className='bg-red-400 h-full w-full'>
                             
@@ -126,7 +126,7 @@ const ColorSwatch = ({isOpen, category, toggleOpen }: ColorSwatch) => {
             }
         {/* </AnimatePresence> */}
       </div>
-      <div className="flex items-center justify-start">
+      <div className="flex items-center justify-start font-extralight">
         Finish: {selected.name}
       </div>
     </div>
